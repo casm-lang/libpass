@@ -41,15 +41,9 @@
 #include "PassRegistry.h"
 
 /**
-   @file     Pass.h
-   @class    Pass
-   
    @brief    TODO
    
    TODO
-   
-   @author   Philipp Paulweber
-   @date     2015-02-14
 */
 
 namespace libpass
@@ -60,16 +54,6 @@ namespace libpass
 	class Pass  
 	{
 	public:
-		/**
-		   @brief    TODO
-
-		   TODO
-	   
-		   @param    arg0    TODO
-		   @return   TODO
-		   @retval   TODO
-		*/
-	
 		virtual void usage(PassUsage& pu)
 		{
 		}

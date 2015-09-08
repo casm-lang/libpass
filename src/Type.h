@@ -38,15 +38,9 @@
 #include "stdhl/cpp/Type.h"
 
 /**
-   @file     Type.h
-   @class    Type
-   
    @brief    TODO
    
    TODO
-   
-   @author   Philipp Paulweber
-   @date     2015-02-14
 */
 
 namespace libpass 
@@ -62,26 +56,14 @@ namespace libpass
 	typedef unordered_map< libpass::PassId, void* > PassId2Ptr;
 	typedef unordered_map< libpass::PassId, u64 > PassId2u64;
 
-	class Type  
-	{
-	public:
+	// class Type  
+	// {
+	// public:
 		
-	
-		
-		/**
-		   @brief    TODO
-		   
-		   TODO
-		   
-		   @param    arg0    TODO
-		   @return   TODO
-		   @retval   TODO
-		*/
-		
-	};
+	// };
 }
 
-#endif /* _DATATYPE_H_ */
+#endif /* _LIB_PASS_TYPE_H_ */
 
 
 //  

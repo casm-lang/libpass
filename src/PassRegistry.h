@@ -40,15 +40,9 @@
 #include "PassInfo.h"
 
 /**
-   @file     PassRegistry.h
-   @class    PassRegistry
-   
    @brief    TODO
    
    TODO
-   
-   @author   Philipp Paulweber
-   @date     2015-02-14
 */
 
 namespace libpass
@@ -67,17 +61,7 @@ namespace libpass
 		{
 			assert(0 && "PassRegistry class is a static-only non-object class!");
 		}
-	
-		/**
-		   @brief    TODO
-
-		   TODO
-	   
-		   @param    arg0    TODO
-		   @return   TODO
-		   @retval   TODO
-		*/
-	
+		
 		static void registerPass(PassInfo* passInfo)
 		{
 			assert( passInfo != 0 && "invalid pass info object pointer" );
@@ -85,7 +69,7 @@ namespace libpass
 	
 			// TODO: add checks for redundant argument names etc.
 		}
-	
+		
 		static PassId2PassInfo& getRegisteredPasses(void)
 		{
 			return registeredPasses();

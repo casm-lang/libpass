@@ -38,15 +38,9 @@
 #include "Type.h"
 
 /**
-   @file     PassInfo.h
-   @class    PassInfo
-   
    @brief    TODO
    
    TODO
-   
-   @author   Philipp Paulweber
-   @date     2015-02-14
 */
 
 namespace libpass
@@ -83,15 +77,6 @@ namespace libpass
 		{
 		}
 		
-		/**
-		   @brief    TODO
-
-		   TODO
-	   
-		   @param    arg0    TODO
-		   @return   TODO
-		   @retval   TODO
-		*/
 		const char* getPassName(void) const 
 		{ 
 			return name; 

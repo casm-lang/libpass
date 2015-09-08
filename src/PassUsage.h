@@ -38,15 +38,9 @@
 // #include ...
 
 /**
-   @file     PassUsage.h
-   @class    PassUsage
-   
    @brief    TODO
    
    TODO
-   
-   @author   Philipp Paulweber
-   @date     2015-02-14
 */
 
 namespace libpass

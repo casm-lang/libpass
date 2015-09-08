@@ -38,15 +38,9 @@
 #include "Type.h"
 
 /**
-   @file     PassResult.h
-   @class    PassResult
-   
    @brief    TODO
    
    TODO
-   
-   @author   Philipp Paulweber
-   @date     2015-02-14
 */
 
 namespace libpass
@@ -70,30 +64,15 @@ namespace libpass
 			changes.clear();
 		}
 	
-		/**
-		   @brief    TODO
-
-		   TODO
-	   
-		   @param    arg0    TODO
-		   @return   TODO
-		   @retval   TODO
-		*/
-	
 		template<class PassName>
 		void* getResult(void)
 		{
-			//DEBUG( __FUNCTION__ << ": " << &PassName::id << " = " << results[ &PassName::id ] 
-			//<< "\n" );
-		
 			return results[ &PassName::id ];
 		}
 	
 		template<class PassName>
 		void setResult(void* passResult)
 		{
-			//DEBUG( __FUNCTION__ << ": " << &PassName::id << " = " << passResult << "\n" );
-		
 			results[ &PassName::id ] = passResult;
 		}
 	
@@ -104,12 +83,6 @@ namespace libpass
 	
 		void printAllResults(void)
 		{
-			// DEBUG( __FUNCTION__ << ": " << results.size() << "\n" );
-		
-			// for( auto& r : results )
-			// {
-			// 	DEBUG( __FUNCTION__ << ": " << r.first << " = " << r.second << "\n" );
-			// }
 		}
 	
 		uint64_t getChanges(PassId id)

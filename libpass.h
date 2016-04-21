@@ -21,13 +21,16 @@
 //  along with libpass. If not, see <http://www.gnu.org/licenses/>.
 //  
 
-#ifndef _LIB_PASS_PASS_H_
-#define _LIB_PASS_PASS_H_
+#ifndef _LIB_PASS_H_
+#define _LIB_PASS_H_
 
-#include "PassInfo.h"
-#include "PassUsage.h"
-#include "PassResult.h"
-#include "PassRegistry.h"
+
+#include "src/Pass.h"
+#include "src/PassInfo.h"
+#include "src/PassRegistry.h"
+#include "src/PassResult.h"
+#include "src/PassUsage.h"
+#include "src/Type.h"
 
 /**
    @brief    TODO
@@ -37,38 +40,9 @@
 
 namespace libpass
 {
-	class PassUsage;
-	class PassResult;
-
-	class Pass  
-	{
-	public:
-		virtual void usage(PassUsage& pu)
-		{
-		}
-	
-		virtual void initialize(void)
-		{
-		}
-	
-		virtual bool run(PassResult& pr) = 0;
-	
-		virtual bool verify(void)
-		{
-			return true;
-		}
-	
-		virtual void finalize(void)
-		{
-		}	
-	
-		virtual void dealloc(void* result)
-		{
-		}	
-	};
 }
 
-#endif /* _LIB_PASS_PASS_H_ */
+#endif /* _LIB_PASS_H_ */
 
 
 //  

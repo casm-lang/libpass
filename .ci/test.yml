@@ -37,4 +37,4 @@ run:
     - |
       date
       uname -a
-      make -C in/stdhl test
+      make -C in/pass test

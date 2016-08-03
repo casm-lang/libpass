@@ -31,6 +31,8 @@ inputs:
     path: in/gtest
   - name: libstdhl
     path: in/stdhl
+  - name: libpass
+    path: in/pass
 outputs:
   - name: out
 run:
@@ -40,5 +42,5 @@ run:
     - |
       date
       uname -a
-      make -C in/stdhl
+      make -C in/pass
       cp -rf in/* out/

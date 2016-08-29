@@ -34,73 +34,73 @@
 
 namespace libpass
 {
-	class PassUsage  
-	{
-	private:
-		// Type::PassIdSet dependsOnSet;
-		// Type::PassIdSet invokesLaterSet;
-		// Type::PassIdSet scheduleBeforeSet;
-		// Type::PassIdSet scheduleAfterSet;
-		
-	public:
-		
-		/**
-		   @brief    TODO
-		   
-		   TODO
-		   
-		   @param    arg0    TODO
-		   @return   TODO
-		   @retval   TODO
-		*/
-		
-		template<class PassName>
-		void dependsOn(void)
-		{
-			// dependsOnSet.insert( &PassName::id );
-		}
-		
-		// const Type::PassIdSet& getDependsOn(void) const 
-		// { 
-		// 	return dependsOnSet; 
-		// }
-	
-	
-		template<class PassName>
-		void invokesLater(void)
-		{
-			// invokesLaterSet.insert( &PassName::id );
-		}
+    class PassUsage  
+    {
+    private:
+        // Type::PassIdSet dependsOnSet;
+        // Type::PassIdSet invokesLaterSet;
+        // Type::PassIdSet scheduleBeforeSet;
+        // Type::PassIdSet scheduleAfterSet;
+        
+    public:
+        
+        /**
+           @brief    TODO
+           
+           TODO
+           
+           @param    arg0    TODO
+           @return   TODO
+           @retval   TODO
+        */
+        
+        template<class PassName>
+        void dependsOn(void)
+        {
+            // dependsOnSet.insert( &PassName::id );
+        }
+        
+        // const Type::PassIdSet& getDependsOn(void) const 
+        // { 
+        //     return dependsOnSet; 
+        // }
+    
+    
+        template<class PassName>
+        void invokesLater(void)
+        {
+            // invokesLaterSet.insert( &PassName::id );
+        }
 
-		// const Type::PassIdSet& getInvokesLater(void) const 
-		// { 
-		// 	return invokesLaterSet; 
-		// }
-	
-	
-		template<class PassName>
-		void scheduleBefore(void)
-		{
-			// scheduleBeforeSet.insert( &PassName::id );
-		}
+        // const Type::PassIdSet& getInvokesLater(void) const 
+        // { 
+        //     return invokesLaterSet; 
+        // }
+    
+    
+        template<class PassName>
+        void scheduleBefore(void)
+        {
+            // scheduleBeforeSet.insert( &PassName::id );
+        }
 
-		// const Type::PassIdSet& getScheduleBefore(void) const 
-		// { 
-		// 	return scheduleBeforeSet; 
-		// }
-	
-	
-		template<class PassName>
-		void scheduleAfter(void)
-		{
-			// scheduleAfterSet.insert( &PassName::id );
-		}
+        // const Type::PassIdSet& getScheduleBefore(void) const 
+        // { 
+        //     return scheduleBeforeSet; 
+        // }
+    
+    
+        template<class PassName>
+        void scheduleAfter(void)
+        {
+            // scheduleAfterSet.insert( &PassName::id );
+        }
 
-		// const Type::PassIdSet& getScheduleAfter(void) const 
-		// { 
-		// 	return scheduleAfterSet; 
-		// }
-	};
+        // const Type::PassIdSet& getScheduleAfter(void) const 
+        // { 
+        //     return scheduleAfterSet; 
+        // }
+    };
 }
 
 #endif /* _LIB_PASS_PASSUSAGE_H_ */

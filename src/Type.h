@@ -34,22 +34,22 @@
 
 namespace libpass 
 {
-	class Pass;
-	class PassInfo;
-	
-	typedef Pass* (*PassConstructor)();
-	typedef void* PassId;
-	typedef void* Ptr;
-	
-	typedef unordered_map< libpass::PassId, PassInfo* > PassId2PassInfo;
-	typedef unordered_map< libpass::PassId, void* > PassId2Ptr;
-	typedef unordered_map< libpass::PassId, u64 > PassId2u64;
+    class Pass;
+    class PassInfo;
+    
+    typedef Pass* (*PassConstructor)();
+    typedef void* PassId;
+    typedef void* Ptr;
+    
+    typedef unordered_map< libpass::PassId, PassInfo* > PassId2PassInfo;
+    typedef unordered_map< libpass::PassId, void* > PassId2Ptr;
+    typedef unordered_map< libpass::PassId, u64 > PassId2u64;
 
-	// class Type  
-	// {
-	// public:
-		
-	// };
+    // class Type  
+    // {
+    // public:
+        
+    // };
 }
 
 #endif /* _LIB_PASS_TYPE_H_ */

@@ -37,35 +37,35 @@
 
 namespace libpass
 {
-	class PassUsage;
-	class PassResult;
+    class PassUsage;
+    class PassResult;
 
-	class Pass  
-	{
-	public:
-		virtual void usage(PassUsage& pu)
-		{
-		}
-	
-		virtual void initialize(void)
-		{
-		}
-	
-		virtual bool run(PassResult& pr) = 0;
-	
-		virtual bool verify(void)
-		{
-			return true;
-		}
-	
-		virtual void finalize(void)
-		{
-		}	
-	
-		virtual void dealloc(void* result)
-		{
-		}	
-	};
+    class Pass  
+    {
+    public:
+        virtual void usage(PassUsage& pu)
+        {
+        }
+    
+        virtual void initialize(void)
+        {
+        }
+    
+        virtual bool run(PassResult& pr) = 0;
+    
+        virtual bool verify(void)
+        {
+            return true;
+        }
+    
+        virtual void finalize(void)
+        {
+        }    
+    
+        virtual void dealloc(void* result)
+        {
+        }    
+    };
 }
 
 #endif /* _LIB_PASS_PASS_H_ */

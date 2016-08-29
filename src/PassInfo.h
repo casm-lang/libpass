@@ -34,88 +34,88 @@
 
 namespace libpass
 {
-	class PassInfo
-	{
-	private:
-		const char* const name;
-		const char* const description;
-		const char* const arg_str;
-		const char        arg_char;
-	
-		const PassId  id;
-	
-		PassConstructor constructor;
-	
-		uint64_t changes;
+    class PassInfo
+    {
+    private:
+        const char* const name;
+        const char* const description;
+        const char* const arg_str;
+        const char        arg_char;
+    
+        const PassId  id;
+    
+        PassConstructor constructor;
+    
+        uint64_t changes;
 
-	public:
-		PassInfo
-		( const char* passName
-		, const char* passDescription
-		, const char* passArgStr
-		, const char  passArgChar
-		, const PassId passID
-		, PassConstructor passConstructor
-		)
-		: name( passName )
-		, description( passDescription )
-		, arg_str( passArgStr )
-		, arg_char( passArgChar )
-		, id( passID )
-		, constructor( passConstructor )
-		{
-		}
-		
-		const char* getPassName(void) const 
-		{ 
-			return name; 
-		}
-	
-		const char* getPassDescription(void) const 
-		{ 
-			return description; 
-		}
-	
-		const char* getPassArgString(void) const 
-		{ 
-			return arg_str; 
-		}
-	
-		const char getPassArgChar(void) const 
-		{ 
-			return arg_char; 
-		}
-	
-		const PassId getPassId(void) const
-		{
-			return id;
-		}
+    public:
+        PassInfo
+        ( const char* passName
+        , const char* passDescription
+        , const char* passArgStr
+        , const char  passArgChar
+        , const PassId passID
+        , PassConstructor passConstructor
+        )
+        : name( passName )
+        , description( passDescription )
+        , arg_str( passArgStr )
+        , arg_char( passArgChar )
+        , id( passID )
+        , constructor( passConstructor )
+        {
+        }
+        
+        const char* getPassName(void) const 
+        { 
+            return name; 
+        }
+    
+        const char* getPassDescription(void) const 
+        { 
+            return description; 
+        }
+    
+        const char* getPassArgString(void) const 
+        { 
+            return arg_str; 
+        }
+    
+        const char getPassArgChar(void) const 
+        { 
+            return arg_char; 
+        }
+    
+        const PassId getPassId(void) const
+        {
+            return id;
+        }
 
-		bool isPassID(const PassId passID) const
-		{
-			return passID == id;
-		}
-	
-		void addChanges(uint64_t change)
-		{
-			changes += change;
-		}
-	
-		uint64_t getChanges(void)
-		{
-			return changes;
-		}
-	
-		Pass* constructPass(void) const
-		{
-			return constructor();
-		}
-	
-		friend ostream& operator<<(ostream& os, PassInfo& pi)
-		{
-			return os; // << pi.getPassName() << ": ";
-		}
-	};
+        bool isPassID(const PassId passID) const
+        {
+            return passID == id;
+        }
+    
+        void addChanges(uint64_t change)
+        {
+            changes += change;
+        }
+    
+        uint64_t getChanges(void)
+        {
+            return changes;
+        }
+    
+        Pass* constructPass(void) const
+        {
+            return constructor();
+        }
+    
+        friend ostream& operator<<(ostream& os, PassInfo& pi)
+        {
+            return os; // << pi.getPassName() << ": ";
+        }
+    };
 }
 
 #endif /* _LIB_PASS_PASSINFO_H_ */

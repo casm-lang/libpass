@@ -34,71 +34,71 @@
 
 namespace libpass
 {
-	class PassResult  
-	{
-	private:
-	
-		PassId2Ptr results;
-	
-		PassId2u64 changes;
-	
-	public:
-		PassResult()
-		{
-		}
-	
-		~PassResult()
-		{
-			results.clear();
-			changes.clear();
-		}
-	
-		template<class PassName>
-		void* getResult(void)
-		{
-			return results[ &PassName::id ];
-		}
-	
-		template<class PassName>
-		void setResult(void* passResult)
-		{
-			results[ &PassName::id ] = passResult;
-		}
-	
-		PassId2Ptr& getResults(void)
-		{
-			return results;
-		}
-	
-		void printAllResults(void)
-		{
-		}
-	
-		uint64_t getChanges(PassId id)
-		{
-			return changes[ id ];
-		}
-	
-		template<class PassName>
-		void setChanges(uint64_t passChanges)
-		{
-			changes[ &PassName::id ] = passChanges;
-		
-			if( passChanges > 0 )
-			{
-			} 
-		}
-	
-		void setChanges(PassId id, uint64_t passChanges)
-		{
-			changes[ id ] = passChanges;
-		}
-	
-		friend ostream& operator<<(ostream& os, PassResult& pr)
-		{
-			return os;
-		}	
-	};
+    class PassResult  
+    {
+    private:
+    
+        PassId2Ptr results;
+    
+        PassId2u64 changes;
+    
+    public:
+        PassResult()
+        {
+        }
+    
+        ~PassResult()
+        {
+            results.clear();
+            changes.clear();
+        }
+    
+        template<class PassName>
+        void* getResult(void)
+        {
+            return results[ &PassName::id ];
+        }
+    
+        template<class PassName>
+        void setResult(void* passResult)
+        {
+            results[ &PassName::id ] = passResult;
+        }
+    
+        PassId2Ptr& getResults(void)
+        {
+            return results;
+        }
+    
+        void printAllResults(void)
+        {
+        }
+    
+        uint64_t getChanges(PassId id)
+        {
+            return changes[ id ];
+        }
+    
+        template<class PassName>
+        void setChanges(uint64_t passChanges)
+        {
+            changes[ &PassName::id ] = passChanges;
+        
+            if( passChanges > 0 )
+            {
+            } 
+        }
+    
+        void setChanges(PassId id, uint64_t passChanges)
+        {
+            changes[ id ] = passChanges;
+        }
+    
+        friend ostream& operator<<(ostream& os, PassResult& pr)
+        {
+            return os;
+        }    
+    };
 }
 
 #endif /* _LIB_PASS_PASSRESULT_H_ */

@@ -51,9 +51,15 @@ namespace libpass
             assert(0 && "PassRegistry class is a static-only non-object class!");
         }
         
-        static void registerPass(PassInfo* passInfo)
+        static void registerPass( PassInfo* passInfo )
         {
             assert( passInfo != 0 && "invalid pass info object pointer" );
+            assert
+            ( passInfo and
+              "invalid pass info object, "
+              "tried to registered null pointer pass info!"
+            );
+            
             registeredPasses()[ passInfo->getPassId() ] = passInfo;
     
             // TODO: add checks for redundant argument names etc.
@@ -68,12 +74,22 @@ namespace libpass
         {
             PassInfo* pi  = static_cast< PassInfo* >( getRegisteredPasses()[ id ] );
         
-            assert( pi != 0 && "invalid pass info object" );
-        
+            assert
+            ( pi and
+              "invalid pass info object, "
+              "tried to access an unregistered pass!"
+            );
+            
             return *pi;
         }
-    };
 
+        template< class PassName >
+        static PassInfo& getPassInfo( void )
+        {
+            return getPassInfo( &PassName::id );
+        }
+    };
+    
     template<class PassName>
     Pass* defaultConstructor()
     {
@@ -84,19 +100,22 @@ namespace libpass
     class PassRegistration : public PassInfo
     {
     public:
-        PassRegistration(const char* passName,
-                         const char* passDescription,
-                         const char* passArgStr,
-                         const char  passArgChar
-            )
-            : PassInfo( passName,
-                        passDescription,
-                        passArgStr,
-                        passArgChar,
-                        &PassName::id,
-                        PassConstructor( defaultConstructor<PassName>) ) 
+        PassRegistration
+        ( const char* passName
+        , const char* passDescription
+        , const char* passArgStr
+        , const char  passArgChar
+        )
+        : PassInfo
+        ( &PassName::id
+        , passName
+        , passDescription
+        , PassConstructor( defaultConstructor<PassName> )
+        , passArgStr
+        , passArgChar
+        ) 
         {
-            PassRegistry::registerPass(this);
+            PassRegistry::registerPass( this );
         }
     };
 }

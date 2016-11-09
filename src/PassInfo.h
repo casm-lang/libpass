@@ -37,33 +37,66 @@ namespace libpass
     class PassInfo
     {
     private:
+        const PassId  id;
         const char* const name;
         const char* const description;
+        PassConstructor constructor;
+        
         const char* const arg_str;
         const char        arg_char;
-    
-        const PassId  id;
-    
-        PassConstructor constructor;
-    
+        function< void( const char* ) > arg_action;
+        bool arg_selected;
+        
         uint64_t changes;
 
     public:
         PassInfo
-        ( const char* passName
-        , const char* passDescription
+        ( const PassId passID
+        , const char*  passName
+        , const char*  passDescription
+        , PassConstructor passConstructor
         , const char* passArgStr
         , const char  passArgChar
-        , const PassId passID
-        , PassConstructor passConstructor
+        , function< void( const char* ) > passArgAction
         )
-        : name( passName )
+        : id( passID )
+        , name( passName )
         , description( passDescription )
+        , constructor( passConstructor )
         , arg_str( passArgStr )
         , arg_char( passArgChar )
-        , id( passID )
-        , constructor( passConstructor )
+        , arg_action( passArgAction )
+        , arg_selected( false )
+        , changes( 0 )
         {
+        }
+        
+        PassInfo
+        ( const PassId passID
+        , const char*  passName
+        , const char*  passDescription
+        , PassConstructor passConstructor
+        , const char* passArgStr
+        , const char  passArgChar
+        )
+        : id( passID )
+        , name( passName )
+        , description( passDescription )
+        , constructor( passConstructor )
+        , arg_str( passArgStr )
+        , arg_char( passArgChar )
+        , arg_selected( false )
+        , changes( 0 )
+        {
+            arg_action = [ this ]( const char* arg )
+            {
+                this->arg_selected = true;
+            };
+        }
+        
+        const PassId getPassId(void) const
+        {
+            return id;
         }
         
         const char* getPassName(void) const 
@@ -85,12 +118,17 @@ namespace libpass
         { 
             return arg_char; 
         }
-    
-        const PassId getPassId(void) const
-        {
-            return id;
-        }
 
+        const function< void( const char* ) >& getPassArgAction(void) const 
+        { 
+            return arg_action; 
+        }
+        
+        const bool isPassArgSelected(void) const 
+        { 
+            return arg_selected; 
+        }
+        
         bool isPassID(const PassId passID) const
         {
             return passID == id;
@@ -105,12 +143,16 @@ namespace libpass
         {
             return changes;
         }
-    
+        
         Pass* constructPass(void) const
         {
-            return constructor();
+            Pass* p = constructor();
+
+            assert( p and "unable to create pass" );
+            
+            return p;
         }
-    
+        
         friend ostream& operator<<(ostream& os, PassInfo& pi)
         {
             return os; // << pi.getPassName() << ": ";

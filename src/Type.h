@@ -24,7 +24,7 @@
 #ifndef _LIB_PASS_TYPE_H_
 #define _LIB_PASS_TYPE_H_
 
-#include "stdhl/cpp/Type.h"
+#include "cpp/Type.h"
 
 /**
    @brief    TODO

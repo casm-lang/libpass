@@ -39,7 +39,7 @@ CP  = $(shell find src -name '*.cpp' | cut -d'.' -f1)
 CO  = $(CP:%=obj/%.o)
 
 CI += -I ./
-CI += -I ../
+CI += -I ../stdhl
 
 CL  =
 

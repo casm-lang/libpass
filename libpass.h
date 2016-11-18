@@ -24,7 +24,6 @@
 #ifndef _LIB_PASS_H_
 #define _LIB_PASS_H_
 
-
 #include "src/Pass.h"
 #include "src/PassInfo.h"
 #include "src/PassRegistry.h"
@@ -34,7 +33,7 @@
 
 /**
    @brief    TODO
-   
+
    TODO
 */
 
@@ -44,8 +43,7 @@ namespace libpass
 
 #endif /* _LIB_PASS_H_ */
 
-
-//  
+//
 //  Local variables:
 //  mode: c++
 //  indent-tabs-mode: nil
@@ -53,4 +51,4 @@ namespace libpass
 //  tab-width: 4
 //  End:
 //  vim:noexpandtab:sw=4:ts=4:
-//  
+//

@@ -30,27 +30,28 @@
 
 /**
    @brief    TODO
-   
+
    TODO
 */
 
 namespace libpass
 {
-    class PassRegistry  
+    class PassRegistry
     {
-    private:
-        static PassId2PassInfo& registeredPasses(void)
+      private:
+        static PassId2PassInfo& registeredPasses( void )
         {
             static PassId2PassInfo passes;
             return passes;
         }
-    
-    public:
+
+      public:
         PassRegistry()
         {
-            assert(0 && "PassRegistry class is a static-only non-object class!");
+            assert(
+                0 && "PassRegistry class is a static-only non-object class!" );
         }
-        
+
         static void registerPass( PassInfo* passInfo )
         {
             assert( passInfo != 0 && "invalid pass info object pointer" );
@@ -59,61 +60,53 @@ namespace libpass
               "invalid pass info object, "
               "tried to registered null pointer pass info!"
             );
-            
+
             registeredPasses()[ passInfo->getPassId() ] = passInfo;
-    
+
             // TODO: add checks for redundant argument names etc.
         }
-        
-        static PassId2PassInfo& getRegisteredPasses(void)
+
+        static PassId2PassInfo& getRegisteredPasses( void )
         {
             return registeredPasses();
         }
-    
+
         static PassInfo& getPassInfo( PassId id )
         {
-            PassInfo* pi  = static_cast< PassInfo* >( getRegisteredPasses()[ id ] );
-        
+            PassInfo* pi
+                = static_cast< PassInfo* >( getRegisteredPasses()[ id ] );
+
             assert
             ( pi and
               "invalid pass info object, "
               "tried to access an unregistered pass!"
             );
-            
+
             return *pi;
         }
 
-        template< class PassName >
+        template < class PassName >
         static PassInfo& getPassInfo( void )
         {
             return getPassInfo( &PassName::id );
         }
     };
-    
-    template<class PassName>
+
+    template < class PassName >
     Pass* defaultConstructor()
     {
         return new PassName();
     }
 
-    template<class PassName>
+    template < class PassName >
     class PassRegistration : public PassInfo
     {
-    public:
-        PassRegistration
-        ( const char* passName
-        , const char* passDescription
-        , const char* passArgStr
-        , const char  passArgChar
-        )
-        : PassInfo
-        ( &PassName::id
-        , passName
-        , passDescription
-        , PassConstructor( defaultConstructor<PassName> )
-        , passArgStr
-        , passArgChar
-        ) 
+      public:
+        PassRegistration( const char* passName, const char* passDescription,
+            const char* passArgStr, const char passArgChar )
+        : PassInfo( &PassName::id, passName, passDescription,
+              PassConstructor( defaultConstructor< PassName > ), passArgStr,
+              passArgChar )
         {
             PassRegistry::registerPass( this );
         }
@@ -122,8 +115,7 @@ namespace libpass
 
 #endif /* _LIB_PASS_PASSREGISTRY_H_ */
 
-
-//  
+//
 //  Local variables:
 //  mode: c++
 //  indent-tabs-mode: nil
@@ -131,4 +123,4 @@ namespace libpass
 //  tab-width: 4
 //  End:
 //  vim:noexpandtab:sw=4:ts=4:
-//  
+//

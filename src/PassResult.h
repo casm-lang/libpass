@@ -28,83 +28,81 @@
 
 /**
    @brief    TODO
-   
+
    TODO
 */
 
 namespace libpass
 {
-    class PassResult  
+    class PassResult
     {
-    private:
-    
+      private:
         PassId2Ptr results;
-    
+
         PassId2u64 changes;
-    
-    public:
+
+      public:
         PassResult()
         {
         }
-    
+
         ~PassResult()
         {
             results.clear();
             changes.clear();
         }
-    
-        template<class PassName>
-        void* getResult(void)
+
+        template < class PassName >
+        void* getResult( void )
         {
-            return results[ &PassName::id ];
+            return results[&PassName::id ];
         }
-    
-        template<class PassName>
-        void setResult(void* passResult)
+
+        template < class PassName >
+        void setResult( void* passResult )
         {
-            results[ &PassName::id ] = passResult;
+            results[&PassName::id ] = passResult;
         }
-    
-        PassId2Ptr& getResults(void)
+
+        PassId2Ptr& getResults( void )
         {
             return results;
         }
-    
-        void printAllResults(void)
+
+        void printAllResults( void )
         {
         }
-    
-        uint64_t getChanges(PassId id)
+
+        uint64_t getChanges( PassId id )
         {
             return changes[ id ];
         }
-    
-        template<class PassName>
-        void setChanges(uint64_t passChanges)
+
+        template < class PassName >
+        void setChanges( uint64_t passChanges )
         {
-            changes[ &PassName::id ] = passChanges;
-        
+            changes[&PassName::id ] = passChanges;
+
             if( passChanges > 0 )
             {
-            } 
+            }
         }
-    
-        void setChanges(PassId id, uint64_t passChanges)
+
+        void setChanges( PassId id, uint64_t passChanges )
         {
             changes[ id ] = passChanges;
         }
-    
-        friend ostream& operator<<(ostream& os, PassResult& pr)
+
+        friend ostream& operator<<( ostream& os, PassResult& pr )
         {
             return os;
-        }    
+        }
     };
 }
 
 #endif /* _LIB_PASS_PASSRESULT_H_ */
 
-
-//  
+//
 //  Local variables:
 //  mode: c++
 //  indent-tabs-mode: nil
@@ -112,4 +110,4 @@ namespace libpass
 //  tab-width: 4
 //  End:
 //  vim:noexpandtab:sw=4:ts=4:
-//  
+//

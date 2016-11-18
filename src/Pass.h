@@ -25,13 +25,13 @@
 #define _LIB_PASS_PASS_H_
 
 #include "PassInfo.h"
-#include "PassUsage.h"
-#include "PassResult.h"
 #include "PassRegistry.h"
+#include "PassResult.h"
+#include "PassUsage.h"
 
 /**
    @brief    TODO
-   
+
    TODO
 */
 
@@ -40,38 +40,37 @@ namespace libpass
     class PassUsage;
     class PassResult;
 
-    class Pass  
+    class Pass
     {
-    public:
-        virtual void usage(PassUsage& pu)
+      public:
+        virtual void usage( PassUsage& pu )
         {
         }
-    
-        virtual void initialize(void)
+
+        virtual void initialize( void )
         {
         }
-    
-        virtual bool run(PassResult& pr) = 0;
-    
-        virtual bool verify(void)
+
+        virtual bool run( PassResult& pr ) = 0;
+
+        virtual bool verify( void )
         {
             return true;
         }
-    
-        virtual void finalize(void)
+
+        virtual void finalize( void )
         {
-        }    
-    
-        virtual void dealloc(void* result)
+        }
+
+        virtual void dealloc( void* result )
         {
-        }    
+        }
     };
 }
 
 #endif /* _LIB_PASS_PASS_H_ */
 
-
-//  
+//
 //  Local variables:
 //  mode: c++
 //  indent-tabs-mode: nil
@@ -79,4 +78,4 @@ namespace libpass
 //  tab-width: 4
 //  End:
 //  vim:noexpandtab:sw=4:ts=4:
-//  
+//

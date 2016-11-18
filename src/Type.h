@@ -28,34 +28,33 @@
 
 /**
    @brief    TODO
-   
+
    TODO
 */
 
-namespace libpass 
+namespace libpass
 {
     class Pass;
     class PassInfo;
-    
-    typedef Pass* (*PassConstructor)();
+
+    typedef Pass* ( *PassConstructor )();
     typedef void* PassId;
     typedef void* Ptr;
-    
+
     typedef unordered_map< libpass::PassId, PassInfo* > PassId2PassInfo;
     typedef unordered_map< libpass::PassId, void* > PassId2Ptr;
     typedef unordered_map< libpass::PassId, u64 > PassId2u64;
 
-    // class Type  
+    // class Type
     // {
     // public:
-        
+
     // };
 }
 
 #endif /* _LIB_PASS_TYPE_H_ */
 
-
-//  
+//
 //  Local variables:
 //  mode: c++
 //  indent-tabs-mode: nil
@@ -63,4 +62,4 @@ namespace libpass
 //  tab-width: 4
 //  End:
 //  vim:noexpandtab:sw=4:ts=4:
-//  
+//

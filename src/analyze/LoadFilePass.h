@@ -21,19 +21,10 @@
 //  along with libpass. If not, see <http://www.gnu.org/licenses/>.
 //
 
-#ifndef _LIB_PASS_H_
-#define _LIB_PASS_H_
+#ifndef _LIB_PASS_LOADFILEPASS_H_
+#define _LIB_PASS_LOADFILEPASS_H_
 
-#include "libstdhlcpp.h"
-
-#include "src/Pass.h"
-#include "src/PassInfo.h"
-#include "src/PassRegistry.h"
-#include "src/PassResult.h"
-#include "src/PassUsage.h"
-#include "src/Type.h"
-
-#include "src/analyze/LoadFilePass.h"
+#include "libpass.h"
 
 /**
    @brief    TODO
@@ -43,9 +34,21 @@
 
 namespace libpass
 {
+    class LoadFilePass : public Pass
+    {
+      private:
+        const char* filename;
+
+      public:
+        static char id;
+
+        LoadFilePass& setFileName( const char* filename );
+
+        virtual bool run( libpass::PassResult& pr );
+    };
 }
 
-#endif /* _LIB_PASS_H_ */
+#endif /* _LIB_PASS_LOADFILEPASS_H_ */
 
 //
 //  Local variables:

@@ -21,31 +21,34 @@
 //  along with libpass. If not, see <http://www.gnu.org/licenses/>.
 //
 
-#ifndef _LIB_PASS_H_
-#define _LIB_PASS_H_
+#include "LoadFilePass.h"
 
-#include "libstdhlcpp.h"
+using namespace libpass;
 
-#include "src/Pass.h"
-#include "src/PassInfo.h"
-#include "src/PassRegistry.h"
-#include "src/PassResult.h"
-#include "src/PassUsage.h"
-#include "src/Type.h"
+char LoadFilePass::id = 0;
 
-#include "src/analyze/LoadFilePass.h"
+static PassRegistration< LoadFilePass > PASS( "Load File Pass",
+    "checks if a file name exists and opens a file stream", 0, 0 );
 
-/**
-   @brief    TODO
-
-   TODO
-*/
-
-namespace libpass
+LoadFilePass& LoadFilePass::setFileName( const char* filename )
 {
+    assert( filename );
+    this->filename = filename;
+    return *this;
 }
 
-#endif /* _LIB_PASS_H_ */
+bool LoadFilePass::run( PassResult& pr )
+{
+    if( not libstdhl::File::exists( filename ) )
+    {
+        libstdhl::Log::error( "file '%s' does not exist!", filename );
+        return false;
+    }
+
+    pr.setResult< LoadFilePass >( (void*)filename );
+
+    return true;
+}
 
 //
 //  Local variables:

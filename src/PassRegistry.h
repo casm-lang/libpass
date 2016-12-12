@@ -93,9 +93,9 @@ namespace libpass
     };
 
     template < class PassName >
-    Pass* defaultConstructor()
+    std::shared_ptr< Pass > defaultConstructor()
     {
-        return new PassName();
+        return std::make_shared< PassName >();
     }
 
     template < class PassName >

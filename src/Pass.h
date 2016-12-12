@@ -43,6 +43,8 @@ namespace libpass
     class Pass
     {
       public:
+        virtual ~Pass() = default;
+
         virtual void usage( PassUsage& pu )
         {
         }

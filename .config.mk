@@ -1,24 +1,24 @@
 #
-#   Copyright (c) 2014-2016 Philipp Paulweber
+#   Copyright (c) 2015-2016 Philipp Paulweber
 #   All rights reserved.
 #
 #   Developed by: Philipp Paulweber
-#                 https://github.com/ppaulweber/libstdhl
+#                 https://github.com/ppaulweber/libpass
 #
-#   This file is part of libstdhl.
+#   This file is part of libpass.
 #
-#   libstdhl is free software: you can redistribute it and/or modify
+#   libpass is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation, either version 3 of the License, or
 #   (at your option) any later version.
 #
-#   libstdhl is distributed in the hope that it will be useful,
+#   libpass is distributed in the hope that it will be useful,
 #   but WITHOUT ANY WARRANTY; without even the implied warranty of
 #   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #   GNU General Public License for more details.
 #
 #   You should have received a copy of the GNU General Public License
-#   along with libstdhl. If not, see <http://www.gnu.org/licenses/>.
+#   along with libpass. If not, see <http://www.gnu.org/licenses/>.
 #
 
 ifndef TARGET

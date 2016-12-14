@@ -27,4 +27,6 @@
 
 TEST( libpass, example )
 {
+    libstdhl::Args asdf( 0, 0, [](const char* arg){}  );
+    
 }

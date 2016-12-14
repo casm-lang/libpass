@@ -1,7 +1,13 @@
 
-* libpass
+* libpass: Compiler Pass Infrastructure Library
 
 TBD
+
+** Status [[https://travis-ci.org/ppaulweber/libpass][https://api.travis-ci.org/ppaulweber/libpass.svg?branch=master]]
+
+This repository is still in a early stage and more libraries and documentation
+is coming soon!
+
 
 ** Copyright and License
 

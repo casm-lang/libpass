@@ -42,7 +42,7 @@ namespace libpass
       public:
         static char id;
 
-        LoadFilePass& setFileName( const char* filename );
+        void setFileName( const char* filename );
 
         virtual bool run( libpass::PassResult& pr );
     };

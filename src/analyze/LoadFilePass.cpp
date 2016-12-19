@@ -30,11 +30,10 @@ char LoadFilePass::id = 0;
 static PassRegistration< LoadFilePass > PASS( "Load File Pass",
     "checks if a file name exists and opens a file stream", 0, 0 );
 
-LoadFilePass& LoadFilePass::setFileName( const char* filename )
+void LoadFilePass::setFileName( const char* filename )
 {
     assert( filename );
     this->filename = filename;
-    return *this;
 }
 
 bool LoadFilePass::run( PassResult& pr )

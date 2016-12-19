@@ -24,6 +24,8 @@
 #ifndef _LIB_PASS_TYPE_H_
 #define _LIB_PASS_TYPE_H_
 
+#include <memory>
+
 #include "cpp/Type.h"
 
 /**
@@ -37,7 +39,7 @@ namespace libpass
     class Pass;
     class PassInfo;
 
-    typedef Pass* ( *PassConstructor )();
+    typedef std::shared_ptr< Pass > ( *PassConstructor )();
     typedef void* PassId;
     typedef void* Ptr;
 

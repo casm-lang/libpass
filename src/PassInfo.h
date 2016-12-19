@@ -132,9 +132,9 @@ namespace libpass
             return changes;
         }
 
-        Pass* constructPass( void ) const
+        auto constructPass( void ) const -> decltype( constructor() )
         {
-            Pass* p = constructor();
+            auto p = constructor();
 
             assert( p and "unable to create pass" );
 

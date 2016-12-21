@@ -44,7 +44,7 @@ namespace libpass
 
         void setFileName( const char* filename );
 
-        virtual bool run( libpass::PassResult& pr );
+        bool run( libpass::PassResult& pr ) override final;
     };
 }
 

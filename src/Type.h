@@ -24,8 +24,6 @@
 #ifndef _LIB_PASS_TYPE_H_
 #define _LIB_PASS_TYPE_H_
 
-#include <memory>
-
 #include "cpp/Type.h"
 
 /**
@@ -43,9 +41,9 @@ namespace libpass
     typedef void* PassId;
     typedef void* Ptr;
 
-    typedef unordered_map< libpass::PassId, PassInfo* > PassId2PassInfo;
-    typedef unordered_map< libpass::PassId, void* > PassId2Ptr;
-    typedef unordered_map< libpass::PassId, u64 > PassId2u64;
+    typedef std::unordered_map< libpass::PassId, PassInfo* > PassId2PassInfo;
+    typedef std::unordered_map< libpass::PassId, void* > PassId2Ptr;
+    typedef std::unordered_map< libpass::PassId, u64 > PassId2u64;
 
     // class Type
     // {

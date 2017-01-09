@@ -44,7 +44,7 @@ namespace libpass
 
         const char* const arg_str;
         const char arg_char;
-        function< void( const char* ) > arg_action;
+        std::function< void( const char* ) > arg_action;
         bool arg_selected;
 
         uint64_t changes;
@@ -53,7 +53,7 @@ namespace libpass
         PassInfo( const PassId passID, const char* passName,
             const char* passDescription, PassConstructor passConstructor,
             const char* passArgStr, const char passArgChar,
-            function< void( const char* ) > passArgAction )
+            std::function< void( const char* ) > passArgAction )
         : id( passID )
         , name( passName )
         , description( passDescription )
@@ -107,7 +107,8 @@ namespace libpass
             return arg_char;
         }
 
-        const function< void( const char* ) >& getPassArgAction( void ) const
+        const std::function< void( const char* ) >& getPassArgAction(
+            void ) const
         {
             return arg_action;
         }
@@ -141,7 +142,7 @@ namespace libpass
             return p;
         }
 
-        friend ostream& operator<<( ostream& os, PassInfo& pi )
+        friend std::ostream& operator<<( std::ostream& os, PassInfo& pi )
         {
             return os; // << pi.getPassName() << ": ";
         }

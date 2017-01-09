@@ -93,7 +93,7 @@ namespace libpass
             changes[ id ] = passChanges;
         }
 
-        friend ostream& operator<<( ostream& os, PassResult& pr )
+        friend std::ostream& operator<<( std::ostream& os, PassResult& pr )
         {
             return os;
         }

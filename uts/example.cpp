@@ -25,7 +25,9 @@
 
 #include "libpass.h"
 
+using namespace libpass;
+
 TEST( libpass, example )
 {
-    libstdhl::Args asdf( 0, 0, []( const char* arg ) {} );
+    LoadFilePass p;
 }

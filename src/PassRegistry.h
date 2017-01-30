@@ -24,8 +24,6 @@
 #ifndef _LIB_PASS_PASSREGISTRY_H_
 #define _LIB_PASS_PASSREGISTRY_H_
 
-#include "Type.h"
-
 #include "PassInfo.h"
 
 /**
@@ -39,10 +37,11 @@ namespace libpass
     class PassRegistry
     {
       private:
-        static PassId2PassInfo& registeredPasses( void )
+        static std::unordered_map< Pass::Id, PassInfo* >& m_registeredPasses(
+            void )
         {
-            static PassId2PassInfo passes;
-            return passes;
+            static std::unordered_map< Pass::Id, PassInfo* > cache;
+            return cache;
         }
 
       public:
@@ -61,20 +60,20 @@ namespace libpass
               "tried to registered null pointer pass info!"
             );
 
-            registeredPasses()[ passInfo->getPassId() ] = passInfo;
+            registeredPasses()[ passInfo->id() ] = passInfo;
 
             // TODO: add checks for redundant argument names etc.
         }
 
-        static PassId2PassInfo& getRegisteredPasses( void )
+        static std::unordered_map< Pass::Id, PassInfo* >& registeredPasses(
+            void )
         {
-            return registeredPasses();
+            return m_registeredPasses();
         }
 
-        static PassInfo& getPassInfo( PassId id )
+        static PassInfo& passInfo( Pass::Id id )
         {
-            PassInfo* pi
-                = static_cast< PassInfo* >( getRegisteredPasses()[ id ] );
+            PassInfo* pi = static_cast< PassInfo* >( registeredPasses()[ id ] );
 
             assert
             ( pi and
@@ -86,9 +85,9 @@ namespace libpass
         }
 
         template < class PassName >
-        static PassInfo& getPassInfo( void )
+        static PassInfo& passInfo( void )
         {
-            return getPassInfo( &PassName::id );
+            return passInfo( &PassName::id );
         }
     };
 
@@ -105,7 +104,7 @@ namespace libpass
         PassRegistration( const char* passName, const char* passDescription,
             const char* passArgStr, const char passArgChar )
         : PassInfo( &PassName::id, passName, passDescription,
-              PassConstructor( defaultConstructor< PassName > ), passArgStr,
+              Pass::Constructor( defaultConstructor< PassName > ), passArgStr,
               passArgChar )
         {
             PassRegistry::registerPass( this );

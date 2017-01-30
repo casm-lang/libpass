@@ -34,7 +34,7 @@
 
 namespace libpass
 {
-    class LoadFilePass : public Pass
+    class LoadFilePass final : public Pass
     {
       private:
         const char* filename;
@@ -44,7 +44,7 @@ namespace libpass
 
         void setFileName( const char* filename );
 
-        bool run( libpass::PassResult& pr ) override final;
+        u1 run( libpass::PassResult& pr ) override;
     };
 }
 

@@ -24,10 +24,7 @@
 #ifndef _LIB_PASS_PASS_H_
 #define _LIB_PASS_PASS_H_
 
-#include "PassInfo.h"
-#include "PassRegistry.h"
-#include "PassResult.h"
-#include "PassUsage.h"
+#include "../stdhl/cpp/Type.h"
 
 /**
    @brief    TODO
@@ -43,6 +40,11 @@ namespace libpass
     class Pass
     {
       public:
+        using Id = void*;
+        using Ptr = void*;
+
+        typedef std::shared_ptr< Pass > ( *Constructor )();
+
         virtual ~Pass() = default;
 
         virtual void usage( PassUsage& pu )
@@ -53,9 +55,9 @@ namespace libpass
         {
         }
 
-        virtual bool run( PassResult& pr ) = 0;
+        virtual u1 run( PassResult& pr ) = 0;
 
-        virtual bool verify( void )
+        virtual u1 verify( void )
         {
             return true;
         }

@@ -23,6 +23,10 @@
 
 #include "LoadFilePass.h"
 
+#include "../stdhl/cpp/Default.h"
+#include "../stdhl/cpp/File.h"
+#include "../stdhl/cpp/Log.h"
+
 using namespace libpass;
 
 char LoadFilePass::id = 0;

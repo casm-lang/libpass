@@ -24,8 +24,6 @@
 #ifndef _LIB_PASS_PASSRESULT_H_
 #define _LIB_PASS_PASSRESULT_H_
 
-#include "Type.h"
-
 /**
    @brief    TODO
 
@@ -37,9 +35,9 @@ namespace libpass
     class PassResult
     {
       private:
-        PassId2Ptr results;
+        std::unordered_map< Pass::Id, Pass::Ptr > m_results;
 
-        PassId2u64 changes;
+        std::unordered_map< Pass::Id, u64 > m_changes;
 
       public:
         PassResult()
@@ -48,49 +46,56 @@ namespace libpass
 
         ~PassResult()
         {
-            results.clear();
-            changes.clear();
+            m_results.clear();
+            m_changes.clear();
         }
 
         template < class PassName >
-        void* getResult( void )
+        void* result( void )
         {
-            return results[&PassName::id ];
+            return result( &PassName::id );
+        }
+
+        void* result( Pass::Id id )
+        {
+            return m_results[ id ];
         }
 
         template < class PassName >
         void setResult( void* passResult )
         {
-            results[&PassName::id ] = passResult;
+            m_results[&PassName::id ] = passResult;
         }
 
-        PassId2Ptr& getResults( void )
+        std::unordered_map< Pass::Id, Pass::Ptr >& results( void )
         {
-            return results;
+            return m_results;
         }
 
         void printAllResults( void )
         {
         }
 
-        uint64_t getChanges( PassId id )
+        template < class PassName >
+        u64 change( void )
         {
-            return changes[ id ];
+            return change( &PassName::id );
+        }
+
+        u64 change( Pass::Id id )
+        {
+            return m_changes[ id ];
         }
 
         template < class PassName >
-        void setChanges( uint64_t passChanges )
+        void setChange( u64 passChanges )
         {
-            changes[&PassName::id ] = passChanges;
-
-            if( passChanges > 0 )
-            {
-            }
+            setChange( &PassName::id, passChanges );
         }
 
-        void setChanges( PassId id, uint64_t passChanges )
+        void setChange( Pass::Id id, u64 passChanges )
         {
-            changes[ id ] = passChanges;
+            m_changes[ id ] = passChanges;
         }
 
         friend std::ostream& operator<<( std::ostream& os, PassResult& pr )

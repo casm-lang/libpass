@@ -24,14 +24,11 @@
 #ifndef _LIB_PASS_H_
 #define _LIB_PASS_H_
 
-#include "libstdhlcpp.h"
-
 #include "src/Pass.h"
 #include "src/PassInfo.h"
 #include "src/PassRegistry.h"
 #include "src/PassResult.h"
 #include "src/PassUsage.h"
-#include "src/Type.h"
 
 #include "src/analyze/LoadFilePass.h"
 

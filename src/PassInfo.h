@@ -24,7 +24,7 @@
 #ifndef _LIB_PASS_PASSINFO_H_
 #define _LIB_PASS_PASSINFO_H_
 
-#include "Type.h"
+#include "Pass.h"
 
 /**
    @brief    TODO
@@ -37,105 +37,104 @@ namespace libpass
     class PassInfo
     {
       private:
-        const PassId id;
-        const char* const name;
-        const char* const description;
-        PassConstructor constructor;
+        const Pass::Id m_id;
+        const char* const m_name;
+        const char* const m_description;
+        Pass::Constructor m_constructor;
 
-        const char* const arg_str;
-        const char arg_char;
-        std::function< void( const char* ) > arg_action;
-        bool arg_selected;
+        const char* const m_arg_str;
+        const char m_arg_char;
+        std::function< void( const char* ) > m_arg_action;
+        u1 m_arg_selected;
 
-        uint64_t changes;
+        u64 m_changes;
 
       public:
-        PassInfo( const PassId passID, const char* passName,
-            const char* passDescription, PassConstructor passConstructor,
+        PassInfo( const Pass::Id passID, const char* passName,
+            const char* passDescription, Pass::Constructor passConstructor,
             const char* passArgStr, const char passArgChar,
             std::function< void( const char* ) > passArgAction )
-        : id( passID )
-        , name( passName )
-        , description( passDescription )
-        , constructor( passConstructor )
-        , arg_str( passArgStr )
-        , arg_char( passArgChar )
-        , arg_action( passArgAction )
-        , arg_selected( false )
-        , changes( 0 )
+        : m_id( passID )
+        , m_name( passName )
+        , m_description( passDescription )
+        , m_constructor( passConstructor )
+        , m_arg_str( passArgStr )
+        , m_arg_char( passArgChar )
+        , m_arg_action( passArgAction )
+        , m_arg_selected( false )
+        , m_changes( 0 )
         {
         }
 
-        PassInfo( const PassId passID, const char* passName,
-            const char* passDescription, PassConstructor passConstructor,
+        PassInfo( const Pass::Id passID, const char* passName,
+            const char* passDescription, Pass::Constructor passConstructor,
             const char* passArgStr, const char passArgChar )
-        : id( passID )
-        , name( passName )
-        , description( passDescription )
-        , constructor( passConstructor )
-        , arg_str( passArgStr )
-        , arg_char( passArgChar )
-        , arg_selected( false )
-        , changes( 0 )
+        : m_id( passID )
+        , m_name( passName )
+        , m_description( passDescription )
+        , m_constructor( passConstructor )
+        , m_arg_str( passArgStr )
+        , m_arg_char( passArgChar )
+        , m_arg_selected( false )
+        , m_changes( 0 )
         {
-            arg_action
-                = [this]( const char* arg ) { this->arg_selected = true; };
+            m_arg_action
+                = [this]( const char* arg ) { this->m_arg_selected = true; };
         }
 
-        const PassId getPassId( void ) const
+        const Pass::Id id( void ) const
         {
-            return id;
+            return m_id;
         }
 
-        const char* getPassName( void ) const
+        const char* name( void ) const
         {
-            return name;
+            return m_name;
         }
 
-        const char* getPassDescription( void ) const
+        const char* description( void ) const
         {
-            return description;
+            return m_description;
         }
 
-        const char* getPassArgString( void ) const
+        const char* argString( void ) const
         {
-            return arg_str;
+            return m_arg_str;
         }
 
-        const char getPassArgChar( void ) const
+        const char argChar( void ) const
         {
-            return arg_char;
+            return m_arg_char;
         }
 
-        const std::function< void( const char* ) >& getPassArgAction(
-            void ) const
+        const std::function< void( const char* ) >& argAction( void ) const
         {
-            return arg_action;
+            return m_arg_action;
         }
 
-        const bool isPassArgSelected( void ) const
+        const u1 isArgSelected( void ) const
         {
-            return arg_selected;
+            return m_arg_selected;
         }
 
-        bool isPassID( const PassId passID ) const
+        u1 isPassId( const Pass::Id passID ) const
         {
-            return passID == id;
+            return m_id == passID;
         }
 
-        void addChanges( uint64_t change )
+        void addChanges( u64 change )
         {
-            changes += change;
+            m_changes += change;
         }
 
-        uint64_t getChanges( void )
+        u64 changes( void )
         {
-            return changes;
+            return m_changes;
         }
 
-        auto constructPass( void ) const -> decltype( constructor() )
+        auto constructPass( void ) const -> decltype( m_constructor() )
         {
-            auto p = constructor();
+            auto p = m_constructor();
 
             assert( p and "unable to create pass" );
 

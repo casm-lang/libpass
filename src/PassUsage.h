@@ -24,8 +24,6 @@
 #ifndef _LIB_PASS_PASSUSAGE_H_
 #define _LIB_PASS_PASSUSAGE_H_
 
-// #include ...
-
 /**
    @brief    TODO
 
@@ -99,7 +97,7 @@ namespace libpass
     };
 }
 
-#endif /* _LIB_PASS_PASSUSAGE_H_ */
+#endif // _LIB_PASS_PASSUSAGE_H_
 
 //
 //  Local variables:

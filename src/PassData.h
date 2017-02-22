@@ -21,51 +21,28 @@
 //  along with libpass. If not, see <http://www.gnu.org/licenses/>.
 //
 
-#include "LoadFilePass.h"
+#ifndef _LIB_PASS_PASSDATA_H_
+#define _LIB_PASS_PASSDATA_H_
 
-#include "../stdhl/cpp/Default.h"
-#include "../stdhl/cpp/File.h"
-#include "../stdhl/cpp/Log.h"
+/**
+   @brief    TODO
 
-using namespace libpass;
+   TODO
+*/
 
-char LoadFilePass::id = 0;
-
-static PassRegistration< LoadFilePass > PASS( "Load File Pass",
-    "checks if a file name exists and opens a file stream", 0, 0 );
-
-u1 LoadFilePass::run( libpass::PassResult& pr )
+namespace libpass
 {
-    if( not libstdhl::File::exists( m_filename ) )
+    class PassData
     {
-        libstdhl::Log::error( "file '%s' does not exist!", m_filename.c_str() );
-        return false;
-    }
+      public:
+        using Ptr = std::shared_ptr< PassData >;
 
-    pr.setResult< LoadFilePass >( libstdhl::make< Data >( m_filename ) );
-
-    return true;
+        PassData() = default;
+        ~PassData() = default;
+    };
 }
 
-void LoadFilePass::setFilename( const std::string& filename )
-{
-    m_filename = filename;
-}
-
-LoadFilePass::Data::Data( const std::string& filename )
-: m_filename( filename )
-{
-}
-
-const char* LoadFilePass::Data::filename( void ) const
-{
-    return m_filename.c_str();
-}
-
-std::string LoadFilePass::Data::str_filename( void ) const
-{
-    return m_filename;
-}
+#endif // _LIB_PASS_PASSDATA_H_
 
 //
 //  Local variables:

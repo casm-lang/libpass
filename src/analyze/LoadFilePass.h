@@ -36,19 +36,34 @@ namespace libpass
 {
     class LoadFilePass final : public Pass
     {
-      private:
-        const char* filename;
-
       public:
         static char id;
 
-        void setFileName( const char* filename );
-
         u1 run( libpass::PassResult& pr ) override;
+
+        void setFilename( const std::string& filename );
+
+        class Data : public PassData
+        {
+          public:
+            using Ptr = std::shared_ptr< Data >;
+
+            Data( const std::string& filename );
+
+            const char* filename( void ) const;
+
+            std::string str_filename( void ) const;
+
+          private:
+            std::string m_filename;
+        };
+
+      private:
+        std::string m_filename;
     };
 }
 
-#endif /* _LIB_PASS_LOADFILEPASS_H_ */
+#endif // _LIB_PASS_LOADFILEPASS_H_
 
 //
 //  Local variables:

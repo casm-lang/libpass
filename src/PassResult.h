@@ -30,16 +30,15 @@
    TODO
 */
 
+#include "PassData.h"
+
 namespace libpass
 {
     class PassResult
     {
-      private:
-        std::unordered_map< Pass::Id, Pass::Ptr > m_results;
-
-        std::unordered_map< Pass::Id, u64 > m_changes;
-
       public:
+        using Ptr = std::shared_ptr< PassResult >;
+
         PassResult()
         {
         }
@@ -50,44 +49,47 @@ namespace libpass
             m_changes.clear();
         }
 
-        template < class PassName >
-        void* result( void )
+        template < typename PassName >
+        typename PassName::Data::Ptr result( void )
         {
-            return result( &PassName::id );
+            return std::static_pointer_cast< typename PassName::Data >(
+                result( &PassName::id ) );
         }
 
-        void* result( Pass::Id id )
+        PassData::Ptr result( const Pass::Id id )
         {
             return m_results[ id ];
         }
 
-        template < class PassName >
-        void setResult( void* passResult )
+        template < typename PassName >
+        void setResult( const typename PassName::Data::Ptr& result )
         {
-            m_results[&PassName::id ] = passResult;
+            m_results[&PassName::id ] = result;
         }
 
-        std::unordered_map< Pass::Id, Pass::Ptr >& results( void )
+        const std::unordered_map< Pass::Id, PassData::Ptr >& results(
+            void ) const
         {
             return m_results;
         }
 
         void printAllResults( void )
         {
+            // TODO
         }
 
-        template < class PassName >
+        template < typename PassName >
         u64 change( void )
         {
             return change( &PassName::id );
         }
 
-        u64 change( Pass::Id id )
+        u64 change( const Pass::Id id )
         {
             return m_changes[ id ];
         }
 
-        template < class PassName >
+        template < typename PassName >
         void setChange( u64 passChanges )
         {
             setChange( &PassName::id, passChanges );
@@ -100,12 +102,18 @@ namespace libpass
 
         friend std::ostream& operator<<( std::ostream& os, PassResult& pr )
         {
+            // TODO
             return os;
         }
+
+      private:
+        std::unordered_map< Pass::Id, PassData::Ptr > m_results;
+
+        std::unordered_map< Pass::Id, u64 > m_changes;
     };
 }
 
-#endif /* _LIB_PASS_PASSRESULT_H_ */
+#endif // _LIB_PASS_PASSRESULT_H_
 
 //
 //  Local variables:

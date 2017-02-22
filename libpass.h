@@ -25,6 +25,7 @@
 #define _LIB_PASS_H_
 
 #include "src/Pass.h"
+#include "src/PassData.h"
 #include "src/PassInfo.h"
 #include "src/PassRegistry.h"
 #include "src/PassResult.h"
@@ -42,7 +43,7 @@ namespace libpass
 {
 }
 
-#endif /* _LIB_PASS_H_ */
+#endif // _LIB_PASS_H_
 
 //
 //  Local variables:

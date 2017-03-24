@@ -36,9 +36,11 @@ static PassRegistration< LoadFilePass > PASS( "Load File Pass",
 
 u1 LoadFilePass::run( libpass::PassResult& pr )
 {
+    PassLogger log( PassRegistry::passInfo< LoadFilePass >(), stream() );
+
     if( not libstdhl::File::exists( m_filename ) )
     {
-        libstdhl::Log::error( "file '%s' does not exist!", m_filename.c_str() );
+        log.error( "file '%s' does not exist!", m_filename.c_str() );
         return false;
     }
 

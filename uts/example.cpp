@@ -27,7 +27,20 @@
 
 using namespace libpass;
 
-TEST( libpass, example )
+TEST( libpass, loadfilepass )
 {
     LoadFilePass p;
+}
+
+TEST( libpass, loadfilepass_run_and_log )
+{
+    PassResult r;
+
+    LoadFilePass p;
+
+    p.run( r );
+
+    libstdhl::Log::StringFormatter f;
+    libstdhl::Log::OutputStreamSink c( std::cerr, f );
+    p.stream().flush( c );
 }

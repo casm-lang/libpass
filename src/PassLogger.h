@@ -21,11 +21,12 @@
 //  along with libpass. If not, see <http://www.gnu.org/licenses/>.
 //
 
-#ifndef _LIB_PASS_PASS_H_
-#define _LIB_PASS_PASS_H_
+#ifndef _LIB_PASS_PASS_LOGGER_H_
+#define _LIB_PASS_PASS_LOGGER_H_
+
+#include "PassInfo.h"
 
 #include "../stdhl/cpp/Log.h"
-#include "../stdhl/cpp/Type.h"
 
 /**
    @brief    TODO
@@ -35,64 +36,48 @@
 
 namespace libpass
 {
-    class PassUsage;
-    class PassResult;
-    class PassInfo;
-
-    class Pass
+    class PassLogger
     {
       public:
-        using Id = void*;
-        using Ptr = void*;
+        PassLogger( const PassInfo& passinfo, libstdhl::Log::Stream& stream );
 
-        typedef std::shared_ptr< Pass > ( *Constructor )();
+        void error( const std::string& text );
+        void error( const char* format, ... );
 
-        Pass( void )
-        : m_stream( *libstdhl::Log::Stream::defaultStream() )
+        void warning( const std::string& text );
+        void warning( const char* format, ... );
+
+        void info( const std::string& text );
+        void info( const char* format, ... );
+
+        void hint( const std::string& text );
+        void hint( const char* format, ... );
+
+        void debug( const std::string& text );
+        void debug( const char* format, ... );
+
+        void c_log(
+            libstdhl::Log::Level::ID level, const char* format, va_list args );
+
+        template < typename... Args >
+        void log( Args&&... args )
         {
+            m_stream.add( std::forward< Args >( args )... );
         }
 
-        virtual ~Pass() = default;
-
-        virtual void usage( PassUsage& pu )
-        {
-        }
-
-        virtual void initialize( void )
-        {
-        }
-
-        virtual u1 run( PassResult& pr ) = 0;
-
-        virtual u1 verify( void )
-        {
-            return true;
-        }
-
-        virtual void finalize( void )
-        {
-        }
-
-        virtual void dealloc( void* result )
-        {
-        }
-
-        virtual libstdhl::Log::Stream& stream( void ) final
+        libstdhl::Log::Stream& stream( void )
         {
             return m_stream;
         }
 
-        virtual void setStream( libstdhl::Log::Stream& stream ) final
-        {
-            m_stream = stream;
-        }
-
       private:
+        const PassInfo& m_passinfo;
+
         libstdhl::Log::Stream& m_stream;
     };
 }
 
-#endif // _LIB_PASS_PASS_H_
+#endif // _LIB_PASS_PASS_LOGGER_H_
 
 //
 //  Local variables:

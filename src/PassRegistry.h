@@ -84,20 +84,20 @@ namespace libpass
             return *pi;
         }
 
-        template < class PassName >
+        template < typename PassName >
         static PassInfo& passInfo( void )
         {
             return passInfo( &PassName::id );
         }
     };
 
-    template < class PassName >
+    template < typename PassName >
     std::shared_ptr< Pass > defaultConstructor()
     {
         return std::make_shared< PassName >();
     }
 
-    template < class PassName >
+    template < typename PassName >
     class PassRegistration : public PassInfo
     {
       public:

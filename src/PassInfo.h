@@ -51,8 +51,9 @@ namespace libpass
 
       public:
         PassInfo( const Pass::Id passID, const std::string& passName,
-            const std::string& passDescription, Pass::Constructor passConstructor,
-            const char* passArgStr, const char passArgChar,
+            const std::string& passDescription,
+            Pass::Constructor passConstructor, const char* passArgStr,
+            const char passArgChar,
             std::function< void( const char* ) > passArgAction )
         : m_id( passID )
         , m_name( passName )
@@ -67,8 +68,9 @@ namespace libpass
         }
 
         PassInfo( const Pass::Id passID, const std::string& passName,
-            const std::string& passDescription, Pass::Constructor passConstructor,
-            const char* passArgStr, const char passArgChar )
+            const std::string& passDescription,
+            Pass::Constructor passConstructor, const char* passArgStr,
+            const char passArgChar )
         : m_id( passID )
         , m_name( passName )
         , m_description( passDescription )

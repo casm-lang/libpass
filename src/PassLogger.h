@@ -39,7 +39,9 @@ namespace libpass
     class PassLogger : public libstdhl::Logger
     {
       public:
-        PassLogger( const PassInfo& passinfo, libstdhl::Log::Stream& stream );
+        PassLogger( const PassInfo& info, libstdhl::Log::Stream& stream );
+
+        PassLogger( Pass::Id id, libstdhl::Log::Stream& stream );
     };
 }
 

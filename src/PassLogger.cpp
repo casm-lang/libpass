@@ -23,15 +23,21 @@
 
 #include "PassLogger.h"
 
+#include "PassRegistry.h"
+
 using namespace libpass;
 using namespace libstdhl;
 
-PassLogger::PassLogger(
-    const PassInfo& passinfo, libstdhl::Log::Stream& stream )
+PassLogger::PassLogger( const PassInfo& info, libstdhl::Log::Stream& stream )
 : Logger( stream )
 {
     setSource( make< Log::Source >(
-        passinfo.name(), "Logging source of '" + passinfo.name() + "'" ) );
+        info.name(), "Logging source of '" + info.name() + "'" ) );
+}
+
+PassLogger::PassLogger( Pass::Id id, libstdhl::Log::Stream& stream )
+: PassLogger( PassRegistry::passInfo( id ), stream )
+{
 }
 
 //

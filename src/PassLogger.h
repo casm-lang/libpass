@@ -36,44 +36,10 @@
 
 namespace libpass
 {
-    class PassLogger
+    class PassLogger : public libstdhl::Logger
     {
       public:
         PassLogger( const PassInfo& passinfo, libstdhl::Log::Stream& stream );
-
-        void error( const std::string& text );
-        void error( const char* format, ... );
-
-        void warning( const std::string& text );
-        void warning( const char* format, ... );
-
-        void info( const std::string& text );
-        void info( const char* format, ... );
-
-        void hint( const std::string& text );
-        void hint( const char* format, ... );
-
-        void debug( const std::string& text );
-        void debug( const char* format, ... );
-
-        void c_log(
-            libstdhl::Log::Level::ID level, const char* format, va_list args );
-
-        template < typename... Args >
-        void log( Args&&... args )
-        {
-            m_stream.add( std::forward< Args >( args )... );
-        }
-
-        libstdhl::Log::Stream& stream( void )
-        {
-            return m_stream;
-        }
-
-      private:
-        const PassInfo& m_passinfo;
-
-        libstdhl::Log::Stream& m_stream;
     };
 }
 

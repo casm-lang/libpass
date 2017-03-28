@@ -38,8 +38,8 @@ namespace libpass
     {
       private:
         const Pass::Id m_id;
-        const char* const m_name;
-        const char* const m_description;
+        const std::string m_name;
+        const std::string m_description;
         Pass::Constructor m_constructor;
 
         const char* const m_arg_str;
@@ -50,8 +50,8 @@ namespace libpass
         u64 m_changes;
 
       public:
-        PassInfo( const Pass::Id passID, const char* passName,
-            const char* passDescription, Pass::Constructor passConstructor,
+        PassInfo( const Pass::Id passID, const std::string& passName,
+            const std::string& passDescription, Pass::Constructor passConstructor,
             const char* passArgStr, const char passArgChar,
             std::function< void( const char* ) > passArgAction )
         : m_id( passID )
@@ -66,8 +66,8 @@ namespace libpass
         {
         }
 
-        PassInfo( const Pass::Id passID, const char* passName,
-            const char* passDescription, Pass::Constructor passConstructor,
+        PassInfo( const Pass::Id passID, const std::string& passName,
+            const std::string& passDescription, Pass::Constructor passConstructor,
             const char* passArgStr, const char passArgChar )
         : m_id( passID )
         , m_name( passName )
@@ -87,12 +87,12 @@ namespace libpass
             return m_id;
         }
 
-        const char* name( void ) const
+        std::string name( void ) const
         {
             return m_name;
         }
 
-        const char* description( void ) const
+        std::string description( void ) const
         {
             return m_description;
         }

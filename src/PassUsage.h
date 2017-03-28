@@ -24,6 +24,8 @@
 #ifndef _LIB_PASS_PASSUSAGE_H_
 #define _LIB_PASS_PASSUSAGE_H_
 
+#include "Pass.h"
+
 /**
    @brief    TODO
 
@@ -34,66 +36,62 @@ namespace libpass
 {
     class PassUsage
     {
-      private:
-        // Type::PassIdSet dependsOnSet;
-        // Type::PassIdSet invokesLaterSet;
-        // Type::PassIdSet scheduleBeforeSet;
-        // Type::PassIdSet scheduleAfterSet;
-
       public:
-        /**
-           @brief    TODO
+        using Set = std::unordered_set< Pass::Id >;
 
-           TODO
+        PassUsage( void );
 
-           @param    arg0    TODO
-           @return   TODO
-           @retval   TODO
-        */
+        u1 terminate( void ) const;
 
-        template < class PassName >
-        void dependsOn( void )
+        void setTerminate( u1 terminate );
+
+        void require( Pass::Id id );
+
+        template < typename PassName >
+        void require( void )
         {
-            // dependsOnSet.insert( &PassName::id );
+            require( &PassName::id );
         }
 
-        // const Type::PassIdSet& getDependsOn(void) const
-        // {
-        //     return dependsOnSet;
-        // }
+        Set requires( void ) const;
 
-        template < class PassName >
-        void invokesLater( void )
+        void provide( Pass::Id id );
+
+        template < typename PassName >
+        void provide( void )
         {
-            // invokesLaterSet.insert( &PassName::id );
+            provide( &PassName::id );
         }
 
-        // const Type::PassIdSet& getInvokesLater(void) const
-        // {
-        //     return invokesLaterSet;
-        // }
+        Set provides( void ) const;
 
-        template < class PassName >
+        void scheduleBefore( Pass::Id id );
+
+        template < typename PassName >
         void scheduleBefore( void )
         {
-            // scheduleBeforeSet.insert( &PassName::id );
+            scheduleBefore( &PassName::id );
         }
 
-        // const Type::PassIdSet& getScheduleBefore(void) const
-        // {
-        //     return scheduleBeforeSet;
-        // }
+        Set schedulesBefore( void ) const;
 
-        template < class PassName >
+        void scheduleAfter( Pass::Id id );
+
+        template < typename PassName >
         void scheduleAfter( void )
         {
-            // scheduleAfterSet.insert( &PassName::id );
+            scheduleAfter( &PassName::id );
         }
 
-        // const Type::PassIdSet& getScheduleAfter(void) const
-        // {
-        //     return scheduleAfterSet;
-        // }
+        Set schedulesAfter( void ) const;
+
+      private:
+        u1 m_terminate;
+
+        Set m_requires;
+        Set m_provides;
+        Set m_schedulesBefore;
+        Set m_schedulesAfter;
     };
 }
 

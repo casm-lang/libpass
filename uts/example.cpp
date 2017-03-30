@@ -40,7 +40,12 @@ TEST( libpass, loadfilepass_run_and_log )
 
     p.run( r );
 
+#ifndef NDEBUG
     libstdhl::Log::StringFormatter f;
+#else
+    libstdhl::Log::ConsoleFormatter f;
+#endif
+
     libstdhl::Log::OutputStreamSink c( std::cerr, f );
     p.stream().flush( c );
 }

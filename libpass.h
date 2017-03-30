@@ -28,6 +28,7 @@
 #include "src/PassData.h"
 #include "src/PassInfo.h"
 #include "src/PassLogger.h"
+#include "src/PassManager.h"
 #include "src/PassRegistry.h"
 #include "src/PassResult.h"
 #include "src/PassUsage.h"

@@ -21,10 +21,16 @@
 //  along with libpass. If not, see <http://www.gnu.org/licenses/>.
 //
 
-#ifndef _LIB_PASS_LOADFILEPASS_H_
-#define _LIB_PASS_LOADFILEPASS_H_
+#ifndef _LIB_PASS_LOAD_FILE_PASS_H_
+#define _LIB_PASS_LOAD_FILE_PASS_H_
 
-#include "libpass.h"
+#include "../Pass.h"
+#include "../PassData.h"
+#include "../PassInfo.h"
+#include "../PassLogger.h"
+#include "../PassRegistry.h"
+#include "../PassResult.h"
+#include "../PassUsage.h"
 
 /**
    @brief    TODO
@@ -63,7 +69,7 @@ namespace libpass
     };
 }
 
-#endif // _LIB_PASS_LOADFILEPASS_H_
+#endif // _LIB_PASS_LOAD_FILE_PASS_H_
 
 //
 //  Local variables:

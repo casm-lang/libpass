@@ -41,10 +41,11 @@ namespace libpass
         const std::string m_name;
         const std::string m_description;
         Pass::Constructor m_constructor;
+        Pass::Constructor m_internal_ctor;
 
         const char* const m_arg_str;
         const char m_arg_char;
-        std::function< void( const char* ) > m_arg_action;
+        std::function< i32( const char* ) > m_arg_action;
         u1 m_arg_selected;
 
         u64 m_changes;
@@ -52,13 +53,15 @@ namespace libpass
       public:
         PassInfo( const Pass::Id passID, const std::string& passName,
             const std::string& passDescription,
-            Pass::Constructor passConstructor, const char* passArgStr,
+            Pass::Constructor passConstructor,
+            Pass::Constructor passInternalCtor, const char* passArgStr,
             const char passArgChar,
-            std::function< void( const char* ) > passArgAction )
+            std::function< i32( const char* ) > passArgAction )
         : m_id( passID )
         , m_name( passName )
         , m_description( passDescription )
         , m_constructor( passConstructor )
+        , m_internal_ctor( passInternalCtor )
         , m_arg_str( passArgStr )
         , m_arg_char( passArgChar )
         , m_arg_action( passArgAction )
@@ -69,19 +72,23 @@ namespace libpass
 
         PassInfo( const Pass::Id passID, const std::string& passName,
             const std::string& passDescription,
-            Pass::Constructor passConstructor, const char* passArgStr,
+            Pass::Constructor passConstructor,
+            Pass::Constructor passInternalCtor, const char* passArgStr,
             const char passArgChar )
         : m_id( passID )
         , m_name( passName )
         , m_description( passDescription )
         , m_constructor( passConstructor )
+        , m_internal_ctor( passInternalCtor )
         , m_arg_str( passArgStr )
         , m_arg_char( passArgChar )
         , m_arg_selected( false )
         , m_changes( 0 )
         {
-            m_arg_action
-                = [this]( const char* arg ) { this->m_arg_selected = true; };
+            m_arg_action = [this]( const char* arg ) {
+                this->m_arg_selected = true;
+                return 0;
+            };
         }
 
         const Pass::Id id( void ) const
@@ -109,7 +116,7 @@ namespace libpass
             return m_arg_char;
         }
 
-        const std::function< void( const char* ) >& argAction( void ) const
+        const std::function< i32( const char* ) >& argAction( void ) const
         {
             return m_arg_action;
         }
@@ -137,9 +144,15 @@ namespace libpass
         auto constructPass( void ) const -> decltype( m_constructor() )
         {
             auto p = m_constructor();
-
             assert( p and "unable to create pass" );
+            return p;
+        }
 
+        auto constructInternalPass( void ) const
+            -> decltype( m_internal_ctor() )
+        {
+            auto p = m_internal_ctor();
+            assert( p and "unable to create pass" );
             return p;
         }
 

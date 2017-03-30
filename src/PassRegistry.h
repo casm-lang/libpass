@@ -84,27 +84,50 @@ namespace libpass
             return *pi;
         }
 
-        template < typename PassName >
+        template < typename T >
         static PassInfo& passInfo( void )
         {
-            return passInfo( &PassName::id );
+            return passInfo( &T::id );
+        }
+
+        template < typename T >
+        static std::function< void( T& ) >& passSetup(
+            const std::function< void( T& ) >& action = nullptr )
+        {
+            static std::function< void( T& ) > cache = []( T& ) {};
+
+            if( action )
+            {
+                cache = action;
+            }
+
+            return cache;
         }
     };
 
-    template < typename PassName >
+    template < typename T >
     std::shared_ptr< Pass > defaultConstructor()
     {
-        return std::make_shared< PassName >();
+        auto pass = std::make_shared< T >();
+        PassRegistry::passSetup< T >()( *pass );
+        return pass;
     }
 
-    template < typename PassName >
+    template < typename T >
+    std::shared_ptr< Pass > internalConstructor()
+    {
+        return std::make_shared< T >();
+    }
+
+    template < typename T >
     class PassRegistration : public PassInfo
     {
       public:
         PassRegistration( const char* passName, const char* passDescription,
             const char* passArgStr, const char passArgChar )
-        : PassInfo( &PassName::id, passName, passDescription,
-              Pass::Constructor( defaultConstructor< PassName > ), passArgStr,
+        : PassInfo( &T::id, passName, passDescription,
+              Pass::Constructor( defaultConstructor< T > ),
+              Pass::Constructor( internalConstructor< T > ), passArgStr,
               passArgChar )
         {
             PassRegistry::registerPass( this );

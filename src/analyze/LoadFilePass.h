@@ -56,9 +56,7 @@ namespace libpass
 
             Data( const std::string& filename );
 
-            const char* filename( void ) const;
-
-            std::string str_filename( void ) const;
+            std::string filename( void ) const;
 
           private:
             std::string m_filename;

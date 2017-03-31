@@ -59,12 +59,7 @@ LoadFilePass::Data::Data( const std::string& filename )
 {
 }
 
-const char* LoadFilePass::Data::filename( void ) const
-{
-    return m_filename.c_str();
-}
-
-std::string LoadFilePass::Data::str_filename( void ) const
+std::string LoadFilePass::Data::filename( void ) const
 {
     return m_filename;
 }

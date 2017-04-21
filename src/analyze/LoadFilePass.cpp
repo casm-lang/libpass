@@ -38,13 +38,15 @@ u1 LoadFilePass::run( libpass::PassResult& pr )
 {
     PassLogger log( &id, stream() );
 
-    if( not libstdhl::File::exists( m_filename ) )
+    try
     {
-        log.error( "file '%s' does not exist!", m_filename.c_str() );
+        pr.setResult< LoadFilePass >( libstdhl::make< Data >( m_filename ) );
+    }
+    catch( const std::invalid_argument& e )
+    {
+        log.error( e.what() );
         return false;
     }
-
-    pr.setResult< LoadFilePass >( libstdhl::make< Data >( m_filename ) );
 
     return true;
 }
@@ -54,14 +56,21 @@ void LoadFilePass::setFilename( const std::string& filename )
     m_filename = filename;
 }
 
-LoadFilePass::Data::Data( const std::string& filename )
+LoadFilePass::Data::Data(
+    const std::string& filename )
 : m_filename( filename )
 {
+    m_stream = libstdhl::File::open( m_filename );
 }
 
 std::string LoadFilePass::Data::filename( void ) const
 {
     return m_filename;
+}
+
+std::fstream& LoadFilePass::Data::stream( void )
+{
+    return m_stream;
 }
 
 //

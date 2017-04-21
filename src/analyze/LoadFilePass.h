@@ -58,8 +58,12 @@ namespace libpass
 
             std::string filename( void ) const;
 
+            std::fstream& stream( void );
+
           private:
             std::string m_filename;
+
+            std::fstream m_stream;
         };
 
       private:

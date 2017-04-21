@@ -47,6 +47,14 @@ namespace libpass
 
         u1 run( libpass::PassResult& pr ) override;
 
+        void setWritable( const u1 enable );
+
+        void setOverwrite( const u1 enable );
+
+        void setAppend( const u1 enable );
+
+        void setBinary( const u1 enable );
+
         void setFilename( const std::string& filename );
 
         class Data : public PassData
@@ -54,19 +62,33 @@ namespace libpass
           public:
             using Ptr = std::shared_ptr< Data >;
 
-            Data( const std::string& filename );
+            Data( const std::string& filename, const std::ios::openmode mode );
+
+            ~Data( void );
 
             std::string filename( void ) const;
+
+            u1 writable( void ) const;
+
+            u1 overwrite( void ) const;
+
+            u1 append( void ) const;
+
+            u1 binary( void ) const;
 
             std::fstream& stream( void );
 
           private:
             std::string m_filename;
 
+            std::ios::openmode m_mode;
+
             std::fstream m_stream;
         };
 
       private:
+        std::ios::openmode m_mode = std::ios::in;
+
         std::string m_filename;
     };
 }

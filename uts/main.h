@@ -21,31 +21,21 @@
 //  along with libpass. If not, see <http://www.gnu.org/licenses/>.
 //
 
-#include "gtest/gtest.h"
+#ifndef _LIB_PASS_UTS_MAIN_H_
+#define _LIB_PASS_UTS_MAIN_H_
+
+#include "../stdhl/uts/main.h"
 
 #include "libpass.h"
 
-using namespace libpass;
+#endif // _LIB_PASS_UTS_MAIN_H_
 
-TEST( libpass, loadfilepass )
-{
-    LoadFilePass p;
-}
-
-TEST( libpass, loadfilepass_run_and_log )
-{
-    PassResult r;
-
-    LoadFilePass p;
-
-    p.run( r );
-
-#ifndef NDEBUG
-    libstdhl::Log::StringFormatter f;
-#else
-    libstdhl::Log::ConsoleFormatter f;
-#endif
-
-    libstdhl::Log::OutputStreamSink c( std::cerr, f );
-    p.stream().flush( c );
-}
+//
+//  Local variables:
+//  mode: c++
+//  indent-tabs-mode: nil
+//  c-basic-offset: 4
+//  tab-width: 4
+//  End:
+//  vim:noexpandtab:sw=4:ts=4:
+//

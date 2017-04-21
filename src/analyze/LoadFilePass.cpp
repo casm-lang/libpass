@@ -40,7 +40,8 @@ u1 LoadFilePass::run( libpass::PassResult& pr )
 
     try
     {
-        pr.setResult< LoadFilePass >( libstdhl::make< Data >( m_filename ) );
+        pr.setResult< LoadFilePass >(
+            libstdhl::make< Data >( m_filename, m_mode ) );
     }
     catch( const std::invalid_argument& e )
     {
@@ -51,21 +52,80 @@ u1 LoadFilePass::run( libpass::PassResult& pr )
     return true;
 }
 
+void LoadFilePass::setWritable( const u1 enable )
+{
+    if( enable )
+    {
+        m_mode |= std::ios::out;
+    }
+    else
+    {
+        m_mode &= ~std::ios::out;
+    }
+}
+
+void LoadFilePass::setOverwrite( const u1 enable )
+{
+    if( enable )
+    {
+        m_mode |= std::ios::trunc;
+    }
+    else
+    {
+        m_mode &= ~std::ios::trunc;
+    }
+}
+
+void LoadFilePass::setAppend( const u1 enable )
+{
+    if( enable )
+    {
+        m_mode |= std::ios::app;
+    }
+    else
+    {
+        m_mode &= ~std::ios::app;
+    }
+}
+
+void LoadFilePass::setBinary( const u1 enable )
+{
+    if( enable )
+    {
+        m_mode |= std::ios::binary;
+    }
+    else
+    {
+        m_mode &= ~std::ios::binary;
+    }
+}
+
 void LoadFilePass::setFilename( const std::string& filename )
 {
     m_filename = filename;
 }
 
 LoadFilePass::Data::Data(
-    const std::string& filename )
+    const std::string& filename, const std::ios::openmode mode )
 : m_filename( filename )
+, m_mode( mode )
 {
-    m_stream = libstdhl::File::open( m_filename );
+    m_stream = libstdhl::File::open( m_filename, m_mode );
+}
+
+LoadFilePass::Data::~Data( void )
+{
+    m_stream.close();
 }
 
 std::string LoadFilePass::Data::filename( void ) const
 {
     return m_filename;
+}
+
+u1 LoadFilePass::Data::writable( void ) const
+{
+    return m_mode & ( 1 << std::ios::out );
 }
 
 std::fstream& LoadFilePass::Data::stream( void )

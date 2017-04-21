@@ -166,14 +166,15 @@ void PassManager::run( std::function< void( void ) > flush )
         auto p = pass.constructPass();
         p->setStream( stream() );
 
+        log.debug( "'" + pass.name() + "': running" );
+
         if( not p->run( pr ) )
         {
             throw std::domain_error(
                 "running pass '" + pass.name() + "' was not successful" );
         }
 
-        log.debug( "running pass '" + pass.name() + "': (took: "
-                   + std::string( swatch )
+        log.debug( "'" + pass.name() + "': done (took: " + std::string( swatch )
                    + ")" );
     }
 

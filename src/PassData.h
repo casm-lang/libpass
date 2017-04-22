@@ -24,6 +24,8 @@
 #ifndef _LIB_PASS_PASSDATA_H_
 #define _LIB_PASS_PASSDATA_H_
 
+#include "Pass.h"
+
 /**
    @brief    TODO
 

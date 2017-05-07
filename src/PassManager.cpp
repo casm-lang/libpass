@@ -82,8 +82,9 @@ u1 PassManager::run( std::function< void( void ) > flush )
         assert( result.second );
         auto& pu = result.first->second;
 
-        // only create pass to fetch the internal usage info and release it
-        pass.constructInternalPass()->usage( pu );
+        { // only create pass to fetch the internal usage info and release it
+            pass.constructInternalPass()->usage( pu );
+        }
 
         for( auto v : pu.provides() )
         {
@@ -97,17 +98,27 @@ u1 PassManager::run( std::function< void( void ) > flush )
     {
         if( m_default_pass )
         {
-            log.info(
-                "no pass selected, using '"
-                + std::string(
-                      PassRegistry::passInfo( m_default_pass ).argString() )
-                + "'" );
+            const auto& pass = PassRegistry::passInfo( m_default_pass );
+
+            if( pass.argChar() )
+            {
+                log.info( "no pass selected, using '-"
+                          + std::string( 1, pass.argChar() )
+                          + "'" );
+            }
+            else if( pass.argString() )
+            {
+                log.info( "no pass selected, using '--"
+                          + std::string( pass.argString() )
+                          + "'" );
+            }
 
             m_selected.emplace( m_default_pass );
         }
         else
         {
-            throw std::domain_error( "no pass was selected" );
+            log.error( "no pass was selected" );
+            return false;
         }
     }
 
@@ -161,6 +172,8 @@ u1 PassManager::run( std::function< void( void ) > flush )
         auto p = pass.constructPass();
         p->setStream( stream() );
 
+        p->initialize();
+
         log.debug( "'" + pass.name() + "': running" );
 
         if( flush )
@@ -168,17 +181,29 @@ u1 PassManager::run( std::function< void( void ) > flush )
             flush();
         }
 
-        if( not p->run( pr ) )
+        const u1 statusRun = p->run( pr );
+
+        log.debug( "'" + pass.name() + "': done (took: " + std::string( swatch )
+                   + ")" );
+
+        u1 statusVerify = false;
+
+        if( statusRun )
+        {
+            statusVerify = p->verify();
+        }
+
+        p->finalize();
+
+        if( not statusRun or not statusVerify )
         {
             if( flush )
             {
                 flush();
             }
+
             return false;
         }
-
-        log.debug( "'" + pass.name() + "': done (took: " + std::string( swatch )
-                   + ")" );
     }
 
     log.debug( "running passes: done (took: " + std::string( swatch ) + ")" );

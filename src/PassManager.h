@@ -67,7 +67,7 @@ namespace libpass
         void setDefaultPass( Pass::Id defaultPass );
 
       public:
-        void run( std::function< void( void ) > flush = nullptr );
+        u1 run( std::function< void( void ) > flush = nullptr );
 
       private:
         std::unordered_set< Pass::Id > m_managed;

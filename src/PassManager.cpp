@@ -55,7 +55,7 @@ void PassManager::setDefaultPass( Pass::Id defaultPass )
     m_default_pass = defaultPass;
 }
 
-void PassManager::run( std::function< void( void ) > flush )
+u1 PassManager::run( std::function< void( void ) > flush )
 {
     libstdhl::Log::Chronograph swatch( true );
     PassLogger log( &id, stream() );
@@ -156,11 +156,6 @@ void PassManager::run( std::function< void( void ) > flush )
 
     for( auto id : schedule )
     {
-        if( flush )
-        {
-            flush();
-        }
-
         const auto pass = PassRegistry::passInfo( id );
 
         auto p = pass.constructPass();
@@ -168,10 +163,18 @@ void PassManager::run( std::function< void( void ) > flush )
 
         log.debug( "'" + pass.name() + "': running" );
 
+        if( flush )
+        {
+            flush();
+        }
+
         if( not p->run( pr ) )
         {
-            throw std::domain_error(
-                "running pass '" + pass.name() + "' was not successful" );
+            if( flush )
+            {
+                flush();
+            }
+            return false;
         }
 
         log.debug( "'" + pass.name() + "': done (took: " + std::string( swatch )
@@ -184,6 +187,8 @@ void PassManager::run( std::function< void( void ) > flush )
     {
         flush();
     }
+
+    return true;
 }
 
 u1 PassManager::run( PassResult& pr )

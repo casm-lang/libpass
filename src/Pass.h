@@ -64,16 +64,12 @@ namespace libpass
 
         virtual u1 run( PassResult& pr ) = 0;
 
-        virtual u1 verify( void )
+        virtual u1 verify( void ) const
         {
             return true;
         }
 
         virtual void finalize( void )
-        {
-        }
-
-        virtual void dealloc( void* result )
         {
         }
 

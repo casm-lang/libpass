@@ -39,11 +39,11 @@ namespace libpass
       public:
         using Ptr = std::shared_ptr< PassResult >;
 
-        PassResult()
+        PassResult( void )
         {
         }
 
-        ~PassResult()
+        ~PassResult( void )
         {
             m_results.clear();
             m_changes.clear();

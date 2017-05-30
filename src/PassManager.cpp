@@ -24,7 +24,6 @@
 #include "PassManager.h"
 
 #include "PassLogger.h"
-#include "PassResult.h"
 
 using namespace libpass;
 
@@ -36,6 +35,7 @@ static PassRegistration< PassManager > PASS( "PassManager",
 
 PassManager::PassManager( void )
 : m_default_pass( nullptr )
+, m_default_result()
 {
     add( &id );
 }
@@ -55,7 +55,12 @@ void PassManager::setDefaultPass( Pass::Id defaultPass )
     m_default_pass = defaultPass;
 }
 
-u1 PassManager::run( std::function< void( void ) > flush )
+void PassManager::setDefaultResult( const PassResult& pr )
+{
+    m_default_result = pr;
+}
+
+u1 PassManager::run( const std::function< void( void ) >& flush )
 {
     libstdhl::Log::Chronograph swatch( true );
     PassLogger log( &id, stream() );
@@ -163,11 +168,18 @@ u1 PassManager::run( std::function< void( void ) > flush )
 
     log.debug( "scheduling: done (took: " + std::string( swatch ) + ")" );
 
-    PassResult pr;
+    PassResult pr = m_default_result;
 
     for( auto id : schedule )
     {
         const auto pass = PassRegistry::passInfo( id );
+
+        if( pr.result( id ) )
+        {
+            log.debug(
+                "'" + pass.name() + "': skipping, result already present!" );
+            continue;
+        }
 
         auto p = pass.constructPass();
         p->setStream( stream() );

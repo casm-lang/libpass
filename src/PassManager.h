@@ -24,7 +24,9 @@
 #ifndef _LIB_PASS_PASS_MANAGER_H_
 #define _LIB_PASS_PASS_MANAGER_H_
 
+#include "Pass.h"
 #include "PassRegistry.h"
+#include "PassResult.h"
 #include "PassUsage.h"
 
 #include "../stdhl/cpp/log/Chronograph.h"
@@ -61,13 +63,15 @@ namespace libpass
             setDefaultPass( PassRegistry::passInfo< T >().id() );
         }
 
+        void setDefaultResult( const PassResult& pr );
+
       private:
         void add( Pass::Id info );
 
         void setDefaultPass( Pass::Id defaultPass );
 
       public:
-        u1 run( std::function< void( void ) > flush = nullptr );
+        u1 run( const std::function< void( void ) >& flush = nullptr );
 
       private:
         std::unordered_set< Pass::Id > m_managed;
@@ -77,6 +81,7 @@ namespace libpass
         std::unordered_map< Pass::Id, std::unordered_set< Pass::Id > >
             m_provides;
         Pass::Id m_default_pass;
+        PassResult m_default_result;
 
         u1 run( PassResult& pr ) override;
     };

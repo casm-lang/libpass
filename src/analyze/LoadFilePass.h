@@ -32,6 +32,8 @@
 #include "../PassResult.h"
 #include "../PassUsage.h"
 
+#include "../stdhl/cpp/file/TextDocument.h"
+
 /**
    @brief    TODO
 
@@ -64,7 +66,7 @@ namespace libpass
 
             Data( const std::string& filename, const std::ios::openmode mode );
 
-            ~Data( void );
+            Data( const libstdhl::File::TextDocument& file );
 
             std::string filename( void ) const;
 
@@ -76,14 +78,14 @@ namespace libpass
 
             u1 binary( void ) const;
 
-            std::fstream& stream( void );
+            std::iostream& stream( void );
 
           private:
             std::string m_filename;
 
             std::ios::openmode m_mode;
 
-            std::fstream m_stream;
+            std::iostream m_stream;
         };
 
       private:

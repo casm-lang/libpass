@@ -109,13 +109,15 @@ LoadFilePass::Data::Data(
     const std::string& filename, const std::ios::openmode mode )
 : m_filename( filename )
 , m_mode( mode )
+, m_stream( libstdhl::File::open( m_filename, m_mode ).rdbuf() )
 {
-    m_stream = libstdhl::File::open( m_filename, m_mode );
 }
 
-LoadFilePass::Data::~Data( void )
+LoadFilePass::Data::Data( const libstdhl::File::TextDocument& file )
+: m_filename( file.path().toString() )
+, m_mode( std::ios::in )
+, m_stream( file.data().rdbuf() )
 {
-    m_stream.close();
 }
 
 std::string LoadFilePass::Data::filename( void ) const
@@ -128,7 +130,7 @@ u1 LoadFilePass::Data::writable( void ) const
     return m_mode & ( 1 << std::ios::out );
 }
 
-std::fstream& LoadFilePass::Data::stream( void )
+std::iostream& LoadFilePass::Data::stream( void )
 {
     return m_stream;
 }

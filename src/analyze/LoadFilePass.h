@@ -85,6 +85,7 @@ namespace libpass
 
             std::ios::openmode m_mode;
 
+            std::fstream m_fstream;
             std::iostream m_stream;
         };
 

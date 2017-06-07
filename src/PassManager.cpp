@@ -173,8 +173,9 @@ u1 PassManager::run( const std::function< void( void ) >& flush )
     for( auto id : schedule )
     {
         const auto pass = PassRegistry::passInfo( id );
+        const auto& pu = m_usages[ id ];
 
-        if( pr.result( id ) )
+        if( pr.result( id ) and pu.requires().size() != 0 )
         {
             log.debug(
                 "'" + pass.name() + "': skipping, result already present!" );

@@ -169,18 +169,21 @@ u1 PassManager::run( const std::function< void( void ) >& flush )
     log.debug( "scheduling: done (took: " + std::string( swatch ) + ")" );
 
     PassResult pr = m_default_result;
+    u1 first = true;
 
     for( auto id : schedule )
     {
         const auto pass = PassRegistry::passInfo( id );
-        const auto& pu = m_usages[ id ];
 
-        if( pr.result( id ) and pu.requires().size() != 0 )
+        if( pr.result( id ) and first )
         {
+            first = false;
             log.debug(
                 "'" + pass.name() + "': skipping, result already present!" );
             continue;
         }
+
+        first = false;
 
         auto p = pass.constructPass();
         p->setStream( stream() );

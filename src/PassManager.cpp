@@ -168,14 +168,14 @@ u1 PassManager::run( const std::function< void( void ) >& flush )
 
     log.debug( "scheduling: done (took: " + std::string( swatch ) + ")" );
 
-    PassResult pr = m_default_result;
+    m_result = m_default_result;
     u1 first = true;
 
     for( auto id : schedule )
     {
         const auto pass = PassRegistry::passInfo( id );
 
-        if( pr.result( id ) and first )
+        if( m_result.result( id ) and first )
         {
             first = false;
             log.debug(
@@ -197,7 +197,7 @@ u1 PassManager::run( const std::function< void( void ) >& flush )
             flush();
         }
 
-        const u1 statusRun = p->run( pr );
+        const u1 statusRun = p->run( m_result );
 
         log.debug( "'" + pass.name() + "': done (took: " + std::string( swatch )
                    + ")" );
@@ -230,6 +230,11 @@ u1 PassManager::run( const std::function< void( void ) >& flush )
     }
 
     return true;
+}
+
+const PassResult& PassManager::result( void ) const
+{
+    return m_result;
 }
 
 u1 PassManager::run( PassResult& pr )

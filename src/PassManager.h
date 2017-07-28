@@ -73,6 +73,8 @@ namespace libpass
       public:
         u1 run( const std::function< void( void ) >& flush = nullptr );
 
+        const PassResult& result( void ) const;
+
       private:
         std::unordered_set< Pass::Id > m_managed;
         std::unordered_set< Pass::Id > m_selected;
@@ -82,6 +84,7 @@ namespace libpass
             m_provides;
         Pass::Id m_default_pass;
         PassResult m_default_result;
+        PassResult m_result;
 
         u1 run( PassResult& pr ) override;
     };

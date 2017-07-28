@@ -82,16 +82,13 @@ namespace libpass
 
           private:
             std::string m_filename;
-
             std::ios::openmode m_mode;
-
             std::fstream m_fstream;
             std::iostream m_stream;
         };
 
       private:
         std::ios::openmode m_mode = std::ios::in;
-
         std::string m_filename;
     };
 }

@@ -118,7 +118,7 @@ LoadFilePass::Data::Data( const libstdhl::File::TextDocument& file )
 : m_filename( file.path().toString() )
 , m_mode( std::ios::in )
 , m_fstream()
-, m_stream( file.data().rdbuf() )
+, m_stream( file.buffer() )
 {
 }
 
@@ -134,6 +134,7 @@ u1 LoadFilePass::Data::writable( void ) const
 
 std::iostream& LoadFilePass::Data::stream( void )
 {
+    m_stream.seekg( 0 );
     return m_stream;
 }
 

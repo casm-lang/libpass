@@ -103,21 +103,6 @@ u1 PassManager::run( const std::function< void( void ) >& flush )
     {
         if( m_default_pass )
         {
-            const auto& pass = PassRegistry::passInfo( m_default_pass );
-
-            if( pass.argChar() )
-            {
-                log.info( "no pass selected, using '-"
-                          + std::string( 1, pass.argChar() )
-                          + "'" );
-            }
-            else if( pass.argString() )
-            {
-                log.info( "no pass selected, using '--"
-                          + std::string( pass.argString() )
-                          + "'" );
-            }
-
             m_selected.emplace( m_default_pass );
         }
         else

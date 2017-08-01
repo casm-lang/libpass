@@ -50,15 +50,16 @@ namespace libpass
         }
 
         template < typename PassName >
-        typename PassName::Data::Ptr result( void )
+        typename PassName::Data::Ptr result( void ) const
         {
             return std::static_pointer_cast< typename PassName::Data >(
                 result( &PassName::id ) );
         }
 
-        PassData::Ptr result( const Pass::Id id )
+        PassData::Ptr result( const Pass::Id id ) const
         {
-            return m_results[ id ];
+            const auto it = m_results.find( id );
+            return ( it != m_results.cend() ) ? it->second : nullptr;
         }
 
         template < typename PassName >

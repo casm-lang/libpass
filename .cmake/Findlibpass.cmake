@@ -38,21 +38,33 @@
 #   not obliged to do so. If you do not wish to do so, delete this exception
 #   statement from your version.
 #
----
-platform: linux
-image_resource:
-  type: docker-image
-  source:
-    repository: ppaulweber/container-cpp-clang
-inputs:
-  - name: in
-outputs:
-  - name: out
-run:
-  path: sh
-  args:
-    - -exc
-    - |
-      date
-      uname -a
-      make -C in/pass test
+
+# LIBPASS_FOUND        - system has found the package
+# LIBPASS_INCLUDE_DIRS - the package include directories
+# LIBPASS_LIBRARY      - the package library
+
+include( LibPackage )
+
+libfind_pkg_check_modules( LIBPASS_PKGCONF libpass )
+
+find_path( LIBPASS_INCLUDE_DIR
+  NAMES libpass/libpass.h
+  PATHS ${LIBPASS_PKGCONF_INCLUDE_DIRS}
+)
+
+find_library( LIBPASS_LIBRARY
+  NAMES libpass pass
+  PATHS ${LIBPASS_PKGCONF_LIBRARY_DIRS}
+)
+
+if( LIBPASS_LIBRARY-NOTFOUND )
+  find_library( LIBPASS_LIBRARY
+    NAMES libpass libpass
+    PATHS ${LIBPASS_PKGCONF_LIBRARY_DIRS}
+    )
+endif()
+
+set( LIBPASS_PROCESS_INCLUDES LIBPASS_INCLUDE_DIR )
+set( LIBPASS_PROCESS_LIBS     LIBPASS_LIBRARY )
+
+libfind_process( LIBPASS )

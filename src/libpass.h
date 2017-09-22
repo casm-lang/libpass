@@ -39,12 +39,18 @@
 //  statement from your version.
 //
 
-#ifndef _LIBPASS_PASSUSAGE_H_
-#define _LIBPASS_PASSUSAGE_H_
+#ifndef _LIBPASS_H_
+#define _LIBPASS_H_
 
 #include <libpass/Pass>
-
-#include <unordered_set>
+#include <libpass/PassData>
+#include <libpass/PassInfo>
+#include <libpass/PassLogger>
+#include <libpass/PassManager>
+#include <libpass/PassRegistry>
+#include <libpass/PassResult>
+#include <libpass/PassUsage>
+#include <libpass/analyze/LoadFilePass>
 
 /**
    @brief    TODO
@@ -54,68 +60,9 @@
 
 namespace libpass
 {
-    class PassUsage
-    {
-      public:
-        using Set = std::unordered_set< Pass::Id >;
-
-        PassUsage( void );
-
-        u1 terminate( void ) const;
-
-        void setTerminate( u1 terminate );
-
-        void require( Pass::Id id );
-
-        template < typename PassName >
-        void require( void )
-        {
-            require( &PassName::id );
-        }
-
-        Set requires( void ) const;
-
-        void provide( Pass::Id id );
-
-        template < typename PassName >
-        void provide( void )
-        {
-            provide( &PassName::id );
-        }
-
-        Set provides( void ) const;
-
-        void scheduleBefore( Pass::Id id );
-
-        template < typename PassName >
-        void scheduleBefore( void )
-        {
-            scheduleBefore( &PassName::id );
-        }
-
-        Set schedulesBefore( void ) const;
-
-        void scheduleAfter( Pass::Id id );
-
-        template < typename PassName >
-        void scheduleAfter( void )
-        {
-            scheduleAfter( &PassName::id );
-        }
-
-        Set schedulesAfter( void ) const;
-
-      private:
-        u1 m_terminate;
-
-        Set m_requires;
-        Set m_provides;
-        Set m_schedulesBefore;
-        Set m_schedulesAfter;
-    };
 }
 
-#endif // _LIBPASS_PASSUSAGE_H_
+#endif // _LIBPASS_H_
 
 //
 //  Local variables:

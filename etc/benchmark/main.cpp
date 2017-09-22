@@ -39,83 +39,11 @@
 //  statement from your version.
 //
 
-#ifndef _LIBPASS_PASSUSAGE_H_
-#define _LIBPASS_PASSUSAGE_H_
+#include <hayai/hayai.hpp>
 
-#include <libpass/Pass>
-
-#include <unordered_set>
-
-/**
-   @brief    TODO
-
-   TODO
-*/
-
-namespace libpass
+BENCHMARK( libpass, main, 0, 0 )
 {
-    class PassUsage
-    {
-      public:
-        using Set = std::unordered_set< Pass::Id >;
-
-        PassUsage( void );
-
-        u1 terminate( void ) const;
-
-        void setTerminate( u1 terminate );
-
-        void require( Pass::Id id );
-
-        template < typename PassName >
-        void require( void )
-        {
-            require( &PassName::id );
-        }
-
-        Set requires( void ) const;
-
-        void provide( Pass::Id id );
-
-        template < typename PassName >
-        void provide( void )
-        {
-            provide( &PassName::id );
-        }
-
-        Set provides( void ) const;
-
-        void scheduleBefore( Pass::Id id );
-
-        template < typename PassName >
-        void scheduleBefore( void )
-        {
-            scheduleBefore( &PassName::id );
-        }
-
-        Set schedulesBefore( void ) const;
-
-        void scheduleAfter( Pass::Id id );
-
-        template < typename PassName >
-        void scheduleAfter( void )
-        {
-            scheduleAfter( &PassName::id );
-        }
-
-        Set schedulesAfter( void ) const;
-
-      private:
-        u1 m_terminate;
-
-        Set m_requires;
-        Set m_provides;
-        Set m_schedulesBefore;
-        Set m_schedulesAfter;
-    };
 }
-
-#endif // _LIBPASS_PASSUSAGE_H_
 
 //
 //  Local variables:

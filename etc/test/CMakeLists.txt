@@ -38,21 +38,14 @@
 #   not obliged to do so. If you do not wish to do so, delete this exception
 #   statement from your version.
 #
----
-platform: linux
-image_resource:
-  type: docker-image
-  source:
-    repository: ppaulweber/container-cpp-clang
-inputs:
-  - name: in
-outputs:
-  - name: out
-run:
-  path: sh
-  args:
-    - -exc
-    - |
-      date
-      uname -a
-      make -C in/pass test
+
+include_directories(
+  ${PROJECT_BINARY_DIR}/src
+  ${GTEST_INCLUDE_DIR}
+  ${LIBSTDHL_INCLUDE_DIR}
+  )
+
+add_library( ${PROJECT}-test OBJECT
+  main.cpp
+  analyze/LoadFilePass.cpp
+  )

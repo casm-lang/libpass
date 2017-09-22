@@ -44,6 +44,8 @@
 
 #include <libpass/PassData>
 
+#include <unordered_map>
+
 /**
    @brief    TODO
 

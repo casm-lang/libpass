@@ -54,23 +54,44 @@ set( CMAKE_MODULE_PATH
   ${${PROJECT}_SOURCE_DIR}/.cmake
   )
 
+set( THREADS_PREFER_PTHREAD_FLAG ON )
+find_package( Threads REQUIRED )
+
 include( ECMGenerateHeaders )
 include( FeatureSummary )
 include( GenerateExportHeader )
 include( CPack )
 include( LibPackage )
 
+
 package_git( ${PROJECT} )
 
 package_print_path( CMAKE_MODULE_PATH )
 package_print_path( CMAKE_INSTALL_PREFIX )
 
-package_find_git( libstdhl master REQUIRED "../stdhl;lib/stdhl" obj )
-package_find_git( GTest    1.8    REQUIRED "../gtest;lib/gtest" build )
-package_find_git( Hayai    1.0.1  REQUIRED "../hayai;lib/hayai" build )
+package_git_submodule( libstdhl master REQUIRED obj   ../stdhl lib/stdhl )
+package_git_submodule( libgtest master REQUIRED build ../gtest lib/gtest )
+package_git_submodule( libhayai master REQUIRED build ../hayai lib/hayai )
 
 add_subdirectory( src )
-add_subdirectory( etc )
+add_subdirectory( etc
+  EXCLUDE_FROM_ALL
+  )
+
+add_custom_target( sync
+  COMMAND
+    make sync
+  DEPENDS
+    libgtest
+    libhayai
+    libstdhl
+  WORKING_DIRECTORY
+    ${PROJECT_SOURCE_DIR}
+  )
+
+add_dependencies( ${PROJECT}-cpp
+  sync
+  )
 
 
 #
@@ -80,6 +101,14 @@ add_subdirectory( etc )
 add_library( ${PROJECT} STATIC
   $<TARGET_OBJECTS:${PROJECT}-cpp>
   )
+
+if( ${LIBSTDHL_FOUND}
+    )
+  target_link_libraries( ${PROJECT}
+    ${LIBSTDHL_LIBRARY}
+    )
+endif()
+
 
 set( ${PROJECT}_VERSION ${GIT_REVTAG} )
 set_property( TARGET ${PROJECT} PROPERTY VERSION   ${PROJECT}_VERSION )
@@ -103,35 +132,43 @@ install(
   "include/${PROJECT}"
   )
 
+
 #
 # test
 # 
 
+
 add_executable( ${PROJECT}-check
+  EXCLUDE_FROM_ALL
   $<TARGET_OBJECTS:${PROJECT}-test>
   )
 
-target_link_libraries( ${PROJECT}-check
-  ${PROJECT}
-  ${LIBSTDHL_LIBRARY}
-  GTest::GTest
-  GTest::Main
-  )
-
+if( ${LIBGTEST_FOUND}
+    )
+  target_link_libraries( ${PROJECT}-check
+    ${PROJECT}
+    ${LIBGTEST_LIBRARY}
+    ${LIBGTEST_MAIN}
+    Threads::Threads
+    )
+endif()
 
 #
 # benchmark
 #
 
 add_executable( ${PROJECT}-run
+  EXCLUDE_FROM_ALL
   $<TARGET_OBJECTS:${PROJECT}-benchmark>
   )
 
-target_link_libraries( ${PROJECT}-run
-  ${PROJECT}
-  ${LIBSTDHL_LIBRARY}
-  ${HAYAI_LIBRARY}
-  )
+if( ${LIBHAYAI_FOUND}
+    )
+  target_link_libraries( ${PROJECT}-run
+    ${PROJECT}
+    ${LIBHAYAI_LIBRARY}
+    )
+endif()
 
 
 #

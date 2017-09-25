@@ -39,14 +39,14 @@
 //  statement from your version.
 //
 
-#ifndef _LIBPASS_UTS_MAIN_H_
-#define _LIBPASS_UTS_MAIN_H_
+#ifndef _LIBPASS_TEST_MAIN_H_
+#define _LIBPASS_TEST_MAIN_H_
 
-#include <libstdhl/test/main>
+#include <libstdhl/Test>
 
 #include <libpass/libpass>
 
-#endif // _LIBPASS_UTS_MAIN_H_
+#endif // _LIBPASS_TEST_MAIN_H_
 
 //
 //  Local variables:

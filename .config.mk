@@ -70,7 +70,6 @@ help:
 
 $(OBJ):
 	@mkdir -p $(OBJ)
-	@mkdir -p $(OBJ)/uts
 
 clean:
 ifneq ("$(wildcard $(OBJ)/CMakeCache.txt)","")
@@ -95,16 +94,19 @@ ifeq ("$(wildcard $(OBJ)/CMakeCache.txt)","")
 	@(\
 	cd $(OBJ); \
 	cmake \
+	-D CMAKE_C_COMPILER=$(CC) \
 	-D CMAKE_CXX_COMPILER=$(CXX) \
 	-D CMAKE_BUILD_TYPE=$(TYPE) .. \
 	)
+else
+	@$(MAKE) $(MFLAGS) --no-print-directory TYPE=$(patsubst %-sync,%,$@) -C $(OBJ) rebuild_cache
 endif
+
 
 sync: debug-sync
 
-$(SYNCS):%-sync: $(OBJ)/Makefile
-	@$(MAKE) $(MFLAGS) --no-print-directory TYPE=$(patsubst %-sync,%,$@) -C $(OBJ) rebuild_cache
-
+$(SYNCS):%-sync:
+	@$(MAKE) $(MFLAGS) --no-print-directory TYPE=$(patsubst %-sync,%,$@) $(OBJ)/Makefile
 
 $(TYPES):%: %-sync
 	@$(MAKE) $(MFLAGS) --no-print-directory -C $(OBJ) ${TARGET}
@@ -163,7 +165,7 @@ CPPCHECK_REPORT = ./$(OBJ)/.cppcheck.xml
 	--report-progress \
 	--enable=all \
 	-I . \
-	./c**
+	./src
 
 	cppcheck \
 	-v \
@@ -173,7 +175,7 @@ CPPCHECK_REPORT = ./$(OBJ)/.cppcheck.xml
 	--force \
 	--enable=all \
 	-I . \
-	./c** > $(CPPCHECK_REPORT)
+	./src > $(CPPCHECK_REPORT)
 
 
 analyze-iwyu: debug-analyze-iwyu
@@ -183,8 +185,8 @@ IWYU_REPORT = ./$(OBJ)/.iwyu.txt
 %-analyze-iwyu:
 	@echo "-- Running 'iwyu' $(patsubst %-analyze-iwyu,%,$@)"
 	@echo -n "" > $(IWYU_REPORT)
-	@for i in `find ./c*`; do include-what-you-use $$i; done
-	@for i in `find ./c*`; do include-what-you-use $$i >> $(IWYU_REPORT); done
+	@for i in `find ./src`; do include-what-you-use $$i; done
+	@for i in `find ./src`; do include-what-you-use $$i >> $(IWYU_REPORT); done
 
 
 analyze-scan-build: debug-analyze-scan-build

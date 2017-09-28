@@ -63,12 +63,7 @@ include( GenerateExportHeader )
 include( CPack )
 include( LibPackage )
 
-
 package_git( ${PROJECT} )
-
-package_print_path( CMAKE_MODULE_PATH )
-package_print_path( CMAKE_INSTALL_PREFIX )
-
 package_git_submodule( libstdhl master REQUIRED obj   ../stdhl lib/stdhl )
 package_git_submodule( libgtest master REQUIRED build ../gtest lib/gtest )
 package_git_submodule( libhayai master REQUIRED build ../hayai lib/hayai )
@@ -131,11 +126,15 @@ install(
   "include/${PROJECT}"
   )
 
+export(
+  TARGETS ${PROJECT}
+  FILE    ${PROJECT}Config.cmake
+  )
+
 
 #
 # test
 # 
-
 
 add_executable( ${PROJECT}-check
   EXCLUDE_FROM_ALL
@@ -150,6 +149,7 @@ if( ${LIBGTEST_FOUND} )
     Threads::Threads
     )
 endif()
+
 
 #
 # benchmark
@@ -178,6 +178,7 @@ install(
   DESTINATION
     "share/cmake/Module/${PROJECT}"
   )
+
 
 #
 # build features and checks

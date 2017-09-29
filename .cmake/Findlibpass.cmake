@@ -50,16 +50,16 @@ libfind_pkg_check_modules( LIBPASS_PKGCONF libpass )
 find_path( LIBPASS_INCLUDE_DIR
   NAMES libpass/libpass.h
   PATHS ${LIBPASS_PKGCONF_INCLUDE_DIRS}
-)
+  )
 
 find_library( LIBPASS_LIBRARY
-  NAMES libpass pass
+  NAMES pass
   PATHS ${LIBPASS_PKGCONF_LIBRARY_DIRS}
-)
+  )
 
 if( LIBPASS_LIBRARY-NOTFOUND )
   find_library( LIBPASS_LIBRARY
-    NAMES libpass libpass
+    NAMES libpass
     PATHS ${LIBPASS_PKGCONF_LIBRARY_DIRS}
     )
 endif()

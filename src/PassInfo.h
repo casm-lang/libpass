@@ -45,6 +45,7 @@
 #include <libpass/Pass>
 
 #include <cassert>
+#include <functional>
 #include <unordered_map>
 
 /**

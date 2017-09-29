@@ -41,4 +41,4 @@
 
 TARGET = libpass
 
-include .config.mk
+include .cmake/config.mk

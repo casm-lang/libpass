@@ -48,25 +48,24 @@ set( CMAKE_INCLUDE_CURRENT_DIR ON )
 set( CMAKE_CXX_STANDARD 11 )
 project( ${PROJECT} LANGUAGES CXX )
 
-find_package( ECM REQUIRED CONFIG QUIET )
 set( CMAKE_MODULE_PATH
   ${ECM_MODULE_PATH}
   ${${PROJECT}_SOURCE_DIR}/.cmake
   )
 
-set( THREADS_PREFER_PTHREAD_FLAG ON )
-find_package( Threads REQUIRED )
-
-include( ECMGenerateHeaders )
-include( FeatureSummary )
-include( GenerateExportHeader )
-include( CPack )
 include( LibPackage )
 
 package_git( ${PROJECT} )
 package_git_submodule( libstdhl master REQUIRED obj   ../stdhl lib/stdhl )
 package_git_submodule( libgtest master REQUIRED build ../gtest lib/gtest )
 package_git_submodule( libhayai master REQUIRED build ../hayai lib/hayai )
+
+find_package( Threads REQUIRED )
+
+include( ECMGenerateHeaders )
+include( FeatureSummary )
+include( GenerateExportHeader )
+include( CPack )
 
 add_subdirectory( src )
 add_subdirectory( etc

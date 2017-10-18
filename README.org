@@ -1,9 +1,9 @@
 # 
-#   Copyright (c) 2015-2017 Philipp Paulweber
+#   Copyright (c) 2015-2017 CASM Organization https://casm-lang.org
 #   All rights reserved.
 # 
 #   Developed by: Philipp Paulweber
-#                 https://github.com/ppaulweber/libpass
+#                 https://github.com/casm-lang/libpass
 # 
 #   This file is part of libpass.
 # 
@@ -43,7 +43,7 @@
 
 TBD
 
-** Status [[https://travis-ci.org/ppaulweber/libpass][https://api.travis-ci.org/ppaulweber/libpass.svg?branch=master]]
+** Status [[https://travis-ci.org/ppaulweber/libpass][https://api.travis-ci.org/casm-lang/libpass.svg?branch=master]]
 
 This repository is still in a early stage and more libraries and documentation
 is coming soon!
@@ -51,19 +51,21 @@ is coming soon!
 
 ** Copyright and License
 
-The copyright holder of libpass is Philipp Paulweber (@ppaulweber)
-and the used license of libpass is a [[https://www.gnu.org/licenses/gpl-3.0.html][GNU GPLv3+]]
-with an additional permission ("GPL Linking Exception").
+The copyright holder of 
+libpass is the [[https://casm-lang.org][CASM organization]] ([[https://github.com/casm-lang][@casm-lang]]) 
+and the used license of 
+libpass is a [[https://www.gnu.org/licenses/gpl-3.0.html][GNU GPLv3+]]
+with an additional "GPL Linking Exception" permission.
 
 *** Notice
 
 #+begin_src
 
-Copyright (c) 2015-2017 Philipp Paulweber
+Copyright (c) 2015-2017 CASM Organization https://casm-lang.org
 All rights reserved.
 
 Developed by: Philipp Paulweber
-              https://github.com/ppaulweber/libpass
+              https://github.com/casm-lang/libpass
 
 This file is part of libpass.
 

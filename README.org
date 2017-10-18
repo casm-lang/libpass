@@ -43,7 +43,7 @@
 
 TBD
 
-** Status [[https://travis-ci.org/ppaulweber/libpass][https://api.travis-ci.org/casm-lang/libpass.svg?branch=master]]
+** Status [[https://travis-ci.org/casm-lang/libpass][https://api.travis-ci.org/casm-lang/libpass.svg?branch=master]]
 
 This repository is still in a early stage and more libraries and documentation
 is coming soon!

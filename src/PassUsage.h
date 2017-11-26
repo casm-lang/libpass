@@ -115,7 +115,7 @@ namespace libpass
     };
 }
 
-#endif // _LIBPASS_PASSUSAGE_H_
+#endif  // _LIBPASS_PASSUSAGE_H_
 
 //
 //  Local variables:

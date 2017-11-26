@@ -62,7 +62,7 @@ namespace libpass
 {
 }
 
-#endif // _LIBPASS_H_
+#endif  // _LIBPASS_H_
 
 //
 //  Local variables:

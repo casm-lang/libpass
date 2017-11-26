@@ -55,8 +55,7 @@ namespace libpass
     class PassRegistry
     {
       private:
-        static std::unordered_map< Pass::Id, PassInfo* >& m_registeredPasses(
-            void )
+        static std::unordered_map< Pass::Id, PassInfo* >& m_registeredPasses( void )
         {
             static std::unordered_map< Pass::Id, PassInfo* > cache;
             return cache;
@@ -65,26 +64,23 @@ namespace libpass
       public:
         PassRegistry()
         {
-            assert(
-                0 && "PassRegistry class is a static-only non-object class!" );
+            assert( 0 && "PassRegistry class is a static-only non-object class!" );
         }
 
         static void registerPass( PassInfo* passInfo )
         {
             assert( passInfo != 0 && "invalid pass info object pointer" );
-            assert
-            ( passInfo and
-              "invalid pass info object, "
-              "tried to registered null pointer pass info!"
-            );
+            assert(
+                passInfo and
+                "invalid pass info object, "
+                "tried to registered null pointer pass info!" );
 
             registeredPasses()[ passInfo->id() ] = passInfo;
 
             // TODO: add checks for redundant argument names etc.
         }
 
-        static std::unordered_map< Pass::Id, PassInfo* >& registeredPasses(
-            void )
+        static std::unordered_map< Pass::Id, PassInfo* >& registeredPasses( void )
         {
             return m_registeredPasses();
         }
@@ -93,11 +89,10 @@ namespace libpass
         {
             PassInfo* pi = static_cast< PassInfo* >( registeredPasses()[ id ] );
 
-            assert
-            ( pi and
-              "invalid pass info object, "
-              "tried to access an unregistered pass!"
-            );
+            assert(
+                pi and
+                "invalid pass info object, "
+                "tried to access an unregistered pass!" );
 
             return *pi;
         }
@@ -141,11 +136,18 @@ namespace libpass
     class PassRegistration : public PassInfo
     {
       public:
-        PassRegistration( const char* passName, const char* passDescription,
-            const char* passArgStr, const char passArgChar )
-        : PassInfo( &T::id, passName, passDescription,
+        PassRegistration(
+            const char* passName,
+            const char* passDescription,
+            const char* passArgStr,
+            const char passArgChar )
+        : PassInfo(
+              &T::id,
+              passName,
+              passDescription,
               Pass::Constructor( defaultConstructor< T > ),
-              Pass::Constructor( internalConstructor< T > ), passArgStr,
+              Pass::Constructor( internalConstructor< T > ),
+              passArgStr,
               passArgChar )
         {
             PassRegistry::registerPass( this );
@@ -153,7 +155,7 @@ namespace libpass
     };
 }
 
-#endif // _LIBPASS_PASSREGISTRY_H_
+#endif  // _LIBPASS_PASSREGISTRY_H_
 
 //
 //  Local variables:

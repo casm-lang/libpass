@@ -41,6 +41,14 @@
 
 TARGET = libpass
 
+FORMAT  = src
+FORMAT += src/*
+FORMAT += etc
+FORMAT += etc/test
+FORMAT += etc/test/*
+FORMAT += etc/benchmark
+FORMAT += etc/benchmark/*
+
 UPDATE_ROOT = ../stdhl
 
 include .cmake/config.mk

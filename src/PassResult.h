@@ -72,8 +72,7 @@ namespace libpass
         template < typename PassName >
         typename PassName::Data::Ptr result( void ) const
         {
-            return std::static_pointer_cast< typename PassName::Data >(
-                result( &PassName::id ) );
+            return std::static_pointer_cast< typename PassName::Data >( result( &PassName::id ) );
         }
 
         PassData::Ptr result( const Pass::Id id ) const
@@ -88,8 +87,7 @@ namespace libpass
             m_results[&PassName::id ] = result;
         }
 
-        const std::unordered_map< Pass::Id, PassData::Ptr >& results(
-            void ) const
+        const std::unordered_map< Pass::Id, PassData::Ptr >& results( void ) const
         {
             return m_results;
         }
@@ -134,7 +132,7 @@ namespace libpass
     };
 }
 
-#endif // _LIBPASS_PASSRESULT_H_
+#endif  // _LIBPASS_PASSRESULT_H_
 
 //
 //  Local variables:

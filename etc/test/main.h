@@ -46,7 +46,7 @@
 
 #include <libpass/libpass>
 
-#endif // _LIBPASS_TEST_MAIN_H_
+#endif  // _LIBPASS_TEST_MAIN_H_
 
 //
 //  Local variables:

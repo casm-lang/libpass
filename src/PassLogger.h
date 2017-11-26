@@ -62,7 +62,7 @@ namespace libpass
     };
 }
 
-#endif // _LIBPASS_PASS_LOGGER_H_
+#endif  // _LIBPASS_PASS_LOGGER_H_
 
 //
 //  Local variables:

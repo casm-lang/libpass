@@ -73,10 +73,13 @@ namespace libpass
         u64 m_changes;
 
       public:
-        PassInfo( const Pass::Id passID, const std::string& passName,
+        PassInfo(
+            const Pass::Id passID,
+            const std::string& passName,
             const std::string& passDescription,
             Pass::Constructor passConstructor,
-            Pass::Constructor passInternalCtor, const char* passArgStr,
+            Pass::Constructor passInternalCtor,
+            const char* passArgStr,
             const char passArgChar,
             std::function< i32( const char* ) > passArgAction )
         : m_id( passID )
@@ -92,10 +95,13 @@ namespace libpass
         {
         }
 
-        PassInfo( const Pass::Id passID, const std::string& passName,
+        PassInfo(
+            const Pass::Id passID,
+            const std::string& passName,
             const std::string& passDescription,
             Pass::Constructor passConstructor,
-            Pass::Constructor passInternalCtor, const char* passArgStr,
+            Pass::Constructor passInternalCtor,
+            const char* passArgStr,
             const char passArgChar )
         : m_id( passID )
         , m_name( passName )
@@ -170,8 +176,7 @@ namespace libpass
             return p;
         }
 
-        auto constructInternalPass( void ) const
-            -> decltype( m_internal_ctor() )
+        auto constructInternalPass( void ) const -> decltype( m_internal_ctor() )
         {
             auto p = m_internal_ctor();
             assert( p and "unable to create pass" );
@@ -180,12 +185,12 @@ namespace libpass
 
         friend std::ostream& operator<<( std::ostream& os, PassInfo& pi )
         {
-            return os; // << pi.getPassName() << ": ";
+            return os;  // << pi.getPassName() << ": ";
         }
     };
 }
 
-#endif // _LIBPASS_PASSINFO_H_
+#endif  // _LIBPASS_PASSINFO_H_
 
 //
 //  Local variables:

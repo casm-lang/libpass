@@ -57,7 +57,7 @@ namespace libpass
     constexpr const char* BRANCH = "@GIT_BRANCH@";
 }
 
-#endif // _LIBPASS_VERSION_H_
+#endif  // _LIBPASS_VERSION_H_
 
 //
 //  Local variables:

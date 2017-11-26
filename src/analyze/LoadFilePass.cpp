@@ -49,8 +49,8 @@ using namespace libpass;
 
 char LoadFilePass::id = 0;
 
-static PassRegistration< LoadFilePass > PASS( "Load File Pass",
-    "checks if a file name exists and opens a file stream", 0, 0 );
+static PassRegistration< LoadFilePass > PASS(
+    "Load File Pass", "checks if a file name exists and opens a file stream", 0, 0 );
 
 u1 LoadFilePass::run( libpass::PassResult& pr )
 {
@@ -58,8 +58,7 @@ u1 LoadFilePass::run( libpass::PassResult& pr )
 
     try
     {
-        pr.setResult< LoadFilePass >(
-            libstdhl::Memory::make< Data >( m_filename, m_mode ) );
+        pr.setResult< LoadFilePass >( libstdhl::Memory::make< Data >( m_filename, m_mode ) );
     }
     catch( const std::invalid_argument& e )
     {
@@ -123,8 +122,7 @@ void LoadFilePass::setFilename( const std::string& filename )
     m_filename = filename;
 }
 
-LoadFilePass::Data::Data(
-    const std::string& filename, const std::ios::openmode mode )
+LoadFilePass::Data::Data( const std::string& filename, const std::ios::openmode mode )
 : m_filename( filename )
 , m_mode( mode )
 , m_fstream( libstdhl::File::open( m_filename, m_mode ) )

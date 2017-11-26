@@ -41,8 +41,8 @@
 
 #include "PassLogger.h"
 
-#include "PassRegistry.h"
 #include <libstdhl/Memory>
+#include "PassRegistry.h"
 
 using namespace libpass;
 using namespace libstdhl;
@@ -51,8 +51,7 @@ using namespace Memory;
 PassLogger::PassLogger( const PassInfo& info, libstdhl::Log::Stream& stream )
 : Logger( stream )
 {
-    setSource( make< Log::Source >(
-        info.name(), "Logging source of '" + info.name() + "'" ) );
+    setSource( make< Log::Source >( info.name(), "Logging source of '" + info.name() + "'" ) );
 }
 
 PassLogger::PassLogger( Pass::Id id, libstdhl::Log::Stream& stream )

@@ -98,8 +98,7 @@ namespace libpass
         std::unordered_set< Pass::Id > m_selected;
         std::unordered_set< Pass::Id > m_start_points;
         std::unordered_map< Pass::Id, PassUsage > m_usages;
-        std::unordered_map< Pass::Id, std::unordered_set< Pass::Id > >
-            m_provides;
+        std::unordered_map< Pass::Id, std::unordered_set< Pass::Id > > m_provides;
         Pass::Id m_default_pass;
         PassResult m_default_result;
         PassResult m_result;
@@ -108,7 +107,7 @@ namespace libpass
     };
 }
 
-#endif // _LIBPASS_PASS_MANAGER_H_
+#endif  // _LIBPASS_PASS_MANAGER_H_
 
 //
 //  Local variables:

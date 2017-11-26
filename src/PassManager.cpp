@@ -50,9 +50,8 @@ using namespace libpass;
 
 char PassManager::id = 0;
 
-static PassRegistration< PassManager > PASS( "PassManager",
-    "displays the pass manager calculated pass dependency graph", "pm-dump",
-    0 );
+static PassRegistration< PassManager > PASS(
+    "PassManager", "displays the pass manager calculated pass dependency graph", "pm-dump", 0 );
 
 PassManager::PassManager( void )
 : m_default_pass( nullptr )
@@ -98,9 +97,8 @@ u1 PassManager::run( const std::function< void( void ) >& flush )
             auto result = m_selected.emplace( id );
             if( not result.second )
             {
-                throw std::domain_error( "already processed '"
-                                         + std::string( pass.argString() )
-                                         + "'" );
+                throw std::domain_error(
+                    "already processed '" + std::string( pass.argString() ) + "'" );
             }
         }
 
@@ -108,7 +106,7 @@ u1 PassManager::run( const std::function< void( void ) >& flush )
         assert( result.second );
         auto& pu = result.first->second;
 
-        { // only create pass to fetch the internal usage info and release it
+        {  // only create pass to fetch the internal usage info and release it
             pass.constructInternalPass()->usage( pu );
         }
 
@@ -184,8 +182,7 @@ u1 PassManager::run( const std::function< void( void ) >& flush )
         if( m_result.result( id ) and first )
         {
             first = false;
-            log.debug(
-                "'" + pass.name() + "': skipping, result already present!" );
+            log.debug( "'" + pass.name() + "': skipping, result already present!" );
             continue;
         }
 
@@ -205,8 +202,7 @@ u1 PassManager::run( const std::function< void( void ) >& flush )
 
         const u1 statusRun = p->run( m_result );
 
-        log.debug( "'" + pass.name() + "': done (took: " + std::string( swatch )
-                   + ")" );
+        log.debug( "'" + pass.name() + "': done (took: " + std::string( swatch ) + ")" );
 
         u1 statusVerify = false;
 

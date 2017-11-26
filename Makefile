@@ -41,4 +41,6 @@
 
 TARGET = libpass
 
+UPDATE_ROOT = ../stdhl
+
 include .cmake/config.mk

@@ -44,10 +44,8 @@ TARGET = libpass
 FORMAT  = src
 FORMAT += src/*
 FORMAT += etc
-FORMAT += etc/test
-FORMAT += etc/test/*
-FORMAT += etc/benchmark
-FORMAT += etc/benchmark/*
+FORMAT += etc/*
+FORMAT += etc/*/*
 
 UPDATE_ROOT = ../stdhl
 

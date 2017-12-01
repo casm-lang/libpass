@@ -50,6 +50,7 @@
 #include <libpass/PassRegistry>
 #include <libpass/PassResult>
 #include <libpass/PassUsage>
+#include <libpass/Version>
 #include <libpass/analyze/LoadFilePass>
 
 /**

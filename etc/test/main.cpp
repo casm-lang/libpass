@@ -41,9 +41,9 @@
 
 #include "main.h"
 
-TEST( libstdhl, main )
+TEST( libpass, main )
 {
-    std::cout << libstdhl::REVTAG << "\n";
+    std::cout << libpass::REVTAG << "\n";
 }
 
 //

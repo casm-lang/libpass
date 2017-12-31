@@ -39,58 +39,41 @@
 //  statement from your version.
 //
 
-#ifndef _LIBPASS_PASS_H_
-#define _LIBPASS_PASS_H_
+#include "Pass.h"
 
-#include <libstdhl/Log>
-#include <libstdhl/Type>
+using namespace libpass;
 
-/**
-   @brief    TODO
-
-   TODO
-*/
-
-using namespace libstdhl;
-
-namespace libpass
+Pass::Pass( void )
+: m_stream( *libstdhl::Log::Stream::defaultStream() )
 {
-    class PassUsage;
-    class PassResult;
-    class PassInfo;
-
-    class Pass
-    {
-      public:
-        using Id = void*;
-        using Ptr = void*;
-
-        typedef std::shared_ptr< Pass > ( *Constructor )();
-
-        Pass( void );
-
-        virtual ~Pass() = default;
-
-        virtual void usage( PassUsage& pu );
-
-        virtual void initialize( void );
-
-        virtual u1 run( PassResult& pr ) = 0;
-
-        virtual u1 verify( void ) const;
-
-        virtual void finalize( void );
-
-        virtual libstdhl::Log::Stream& stream( void ) final;
-
-        virtual void setStream( libstdhl::Log::Stream& stream ) final;
-
-      private:
-        libstdhl::Log::Stream& m_stream;
-    };
 }
 
-#endif  // _LIBPASS_PASS_H_
+void Pass::usage( PassUsage& pu )
+{
+}
+
+void Pass::initialize( void )
+{
+}
+
+u1 Pass::verify( void ) const
+{
+    return true;
+}
+
+void Pass::finalize( void )
+{
+}
+
+libstdhl::Log::Stream& Pass::stream( void )
+{
+    return m_stream;
+}
+
+void Pass::setStream( libstdhl::Log::Stream& stream )
+{
+    m_stream = stream;
+}
 
 //
 //  Local variables:

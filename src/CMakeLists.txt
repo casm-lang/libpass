@@ -41,15 +41,19 @@
 
 include_directories(
   ${LIBSTDHL_INCLUDE_DIR}
-  )
+)
 
 
 add_library( ${PROJECT}-cpp OBJECT
+  Pass.cpp
+  PassInfo.cpp
   PassLogger.cpp
   PassManager.cpp
+  PassRegistry.cpp
+  PassResult.cpp
   PassUsage.cpp
   analyze/LoadFilePass.cpp
-  )
+)
 
 
 configure_file(
@@ -75,7 +79,7 @@ ecm_generate_headers( ${PROJECT}_HEADERS_CPP
     ${PROJECT}
   REQUIRED_HEADERS
     ${PROJECT}_HEADERS
-  )
+)
 install(
   FILES
     ${${PROJECT}_HEADERS}
@@ -83,7 +87,7 @@ install(
     ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT}/Version
   DESTINATION
     "include/${PROJECT}"
-  )
+)
 
 
 ecm_generate_headers( ${PROJECT}_ANALYZE_HEADERS_CPP

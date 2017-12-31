@@ -41,152 +41,145 @@
 
 #include "PassManager.h"
 
-#include "PassLogger.h"
+#include <libpass/PassLogger>
+
+#include <libstdhl/log/Chronograph>
 
 #include <algorithm>
 #include <iostream>
+#include <tuple>
+#include <vector>
 
 using namespace libpass;
 
 char PassManager::id = 0;
 
 static PassRegistration< PassManager > PASS(
-    "PassManager", "displays the pass manager calculated pass dependency graph", "pm-dump", 0 );
+    "PassManager", "calculates the pass pipeline dependency graph", "pm-calc", 0 );
 
 PassManager::PassManager( void )
-: m_default_pass( nullptr )
-, m_default_result()
+: m_defaultPass( nullptr )
+, m_defaultResult()
 {
-    add( &id );
+}
+
+const std::unordered_set< Pass::Id >& PassManager::passes( void ) const
+{
+    return m_passes;
 }
 
 void PassManager::add( Pass::Id id )
 {
-    auto result = m_managed.emplace( id );
+    auto result = m_passes.emplace( id );
     if( not result.second )
     {
         const auto pass = PassRegistry::passInfo( id );
-        throw std::domain_error( "pass '" + pass.name() + "' already managed" );
+        throw std::domain_error( "'" + pass.name() + "' already managed" );
     }
-}
-
-void PassManager::setDefaultPass( Pass::Id defaultPass )
-{
-    m_default_pass = defaultPass;
 }
 
 void PassManager::setDefaultResult( const PassResult& pr )
 {
-    m_default_result = pr;
+    m_defaultResult = pr;
+}
+
+const PassResult& PassManager::result( void ) const
+{
+    return m_result;
+}
+
+void PassManager::setDefaultPass( Pass::Id defaultPass )
+{
+    m_defaultPass = defaultPass;
+}
+
+void PassManager::process( const Pass::Id passId, const Pass::Id pathId )
+{
+    auto it = m_passUsages.emplace( passId, PassUsage() );
+    auto& passUsage = it.first->second;
+    if( it.second )
+    {
+        // only create pass to fetch the internal usage info and release it
+        const auto pass = PassRegistry::passInfo( passId );
+        pass.constructInternalPass()->usage( passUsage );
+    }
+
+    std::vector< Pass::Id > dependencies;
+    std::set_union(
+        passUsage.requires().begin(),
+        passUsage.requires().end(),
+        passUsage.schedulesAfter().begin(),
+        passUsage.schedulesAfter().end(),
+        std::back_inserter( dependencies ) );
+
+    for( auto dependencyId : dependencies )
+    {
+        m_paths[ pathId ].emplace( dependencyId );
+        process( dependencyId, pathId );
+    }
+
+    std::vector< Pass::Id > features;
+    std::set_union(
+        passUsage.provides().begin(),
+        passUsage.provides().end(),
+        passUsage.schedulesBefore().begin(),
+        passUsage.schedulesBefore().end(),
+        std::back_inserter( features ) );
+
+    for( auto featureId : features )
+    {
+        m_paths[ featureId ].emplace( pathId );
+        process( featureId, pathId );
+    }
+}
+
+void PassManager::schedule( const Pass::Id passId )
+{
+    const auto& passUsage = m_passUsages[ passId ];
+
+    for( auto scheduleAfterId : passUsage.schedulesAfter() )
+    {
+        m_passWeights[ scheduleAfterId ] +=
+            m_passWeights[ passId ] + passUsage.schedulesAfter().size();
+        schedule( scheduleAfterId );
+    }
+
+    for( auto requireId : passUsage.requires() )
+    {
+        m_passWeights[ requireId ] += m_passWeights[ passId ] + passUsage.requires().size();
+        schedule( requireId );
+    }
 }
 
 u1 PassManager::run( const std::function< void( void ) >& flush )
 {
-    libstdhl::Log::Chronograph swatch( true );
     PassLogger log( &id, stream() );
+    libstdhl::Log::Chronograph swatch( true );
 
-    // find all selected passes and calculate 'usage graph'
-    for( auto id : m_managed )
+    m_result = m_defaultResult;
+
+    // determine the pass pipeline schedule
+    const u1 statusScheduling = run( m_result );
+
+    if( not statusScheduling )
     {
-        const auto pass = PassRegistry::passInfo( id );
-
-        if( pass.isArgSelected() )
-        {
-            log.debug( pass.name() + ": selected" );
-
-            auto result = m_selected.emplace( id );
-            if( not result.second )
-            {
-                throw std::domain_error(
-                    "already processed '" + std::string( pass.argString() ) + "'" );
-            }
-        }
-
-        auto result = m_usages.emplace( id, PassUsage() );
-        assert( result.second );
-        auto& pu = result.first->second;
-
-        {  // only create pass to fetch the internal usage info and release it
-            pass.constructInternalPass()->usage( pu );
-        }
-
-        for( auto v : pu.provides() )
-        {
-            m_provides[ v ].emplace( id );
-        }
+        return false;
     }
 
-    log.debug( "selection: done (took: " + std::string( swatch ) + ")" );
-
-    if( m_selected.size() == 0 )
-    {
-        if( m_default_pass )
-        {
-            m_selected.emplace( m_default_pass );
-        }
-        else
-        {
-            log.error( "no pass was selected" );
-            return false;
-        }
-    }
-
-    std::vector< Pass::Id > schedule;
-
-    for( auto id : m_selected )
-    {
-        std::vector< Pass::Id > stack = { id };
-
-        while( stack.size() != 0 )
-        {
-            schedule.push_back( stack.back() );
-
-            stack.pop_back();
-
-            const auto sched_id = schedule.back();
-            const auto& pu = m_usages[ sched_id ];
-
-            // log.debug( "schedule: '" + PassRegistry::passInfo( sched_id
-            // ).name()
-            //            + "' (depends on: "
-            //            + std::to_string( pu.requires().size() )
-            //            + ") (provided ref: "
-            //            + std::to_string( m_provides[ sched_id ].size() )
-            //            + ")" );
-
-            for( auto u : pu.requires() )
-            {
-                stack.push_back( u );
-                // log.debug( "    <-- " + PassRegistry::passInfo( u ).name() );
-            }
-
-            for( auto u : m_provides[ sched_id ] )
-            {
-                stack.push_back( u );
-                // log.debug( "    --> " + PassRegistry::passInfo( u ).name() );
-            }
-        }
-    }
-
-    std::reverse( std::begin( schedule ), std::end( schedule ) );
-
-    log.debug( "scheduling: done (took: " + std::string( swatch ) + ")" );
-
-    m_result = m_default_result;
     u1 first = true;
-
-    for( auto id : schedule )
+    for( auto element : m_schedule )
     {
-        const auto pass = PassRegistry::passInfo( id );
+        const auto passId = std::get< 0 >( element );
+        const auto pass = PassRegistry::passInfo( passId );
 
-        if( m_result.result( id ) and first )
+        if( m_result.hasOutput( passId ) and first )
         {
             first = false;
             log.debug( "'" + pass.name() + "': skipping, result already present!" );
             continue;
         }
 
-        first = false;
+        m_result.setStatus( passId, false );
 
         auto p = pass.constructPass();
         p->setStream( stream() );
@@ -222,6 +215,8 @@ u1 PassManager::run( const std::function< void( void ) >& flush )
 
             return false;
         }
+
+        m_result.setStatus( passId, true );
     }
 
     log.debug( "running passes: done (took: " + std::string( swatch ) + ")" );
@@ -234,39 +229,79 @@ u1 PassManager::run( const std::function< void( void ) >& flush )
     return true;
 }
 
-const PassResult& PassManager::result( void ) const
-{
-    return m_result;
-}
-
 u1 PassManager::run( PassResult& pr )
 {
     PassLogger log( &id, stream() );
+    libstdhl::Log::Chronograph swatch( true );
 
-    log.debug( "" );
-
-    std::ostream& stream = std::cout;
-
-    for( auto v : m_usages )
+    // find all selected passes and calculate 'usage graph'
+    for( auto pi : passes() )
     {
-        const auto id = v.first;
-        const auto pu = v.second;
-        const auto pass = PassRegistry::passInfo( id );
+        const auto pass = PassRegistry::passInfo( pi );
 
-        stream << pass.name() << "\n";
-
-        for( auto u : pu.requires() )
+        if( pass.isArgSelected() )
         {
-            stream << "    <-- " << PassRegistry::passInfo( u ).name() << "\n";
+            log.debug( pass.name() + ": selected" );
+
+            auto result = m_selected.emplace( pi );
+            if( not result.second )
+            {
+                throw std::domain_error(
+                    "already processed '" + std::string( pass.argString() ) + "'" );
+            }
         }
 
-        for( auto u : m_provides[ id ] )
-        {
-            stream << "    --> " << PassRegistry::passInfo( u ).name() << "\n";
-        }
-
-        stream << "\n";
+        process( pi, pi );
     }
+
+    if( m_selected.size() == 0 )
+    {
+        if( m_defaultPass )
+        {
+            m_selected.emplace( m_defaultPass );
+            process( m_defaultPass, m_defaultPass );
+        }
+        else
+        {
+            log.error( "no pass was selected" );
+            return false;
+        }
+    }
+
+    log.debug( "selection: done" );
+
+    const auto passId = *m_selected.begin();
+    m_passWeights.emplace( passId, 0 );
+    for( auto id : m_paths[ passId ] )
+    {
+        m_passWeights.emplace( id, 0 );
+    }
+
+    schedule( passId );
+
+    for( auto it : m_passWeights )
+    {
+        const auto passId = it.first;
+        const auto passWeight = it.second;
+        m_schedule.emplace_back( std::make_tuple( passId, passWeight ) );
+    }
+
+    std::sort(
+        m_schedule.begin(),
+        m_schedule.end(),
+        []( const std::tuple< Pass::Id, i64 >& a, const std::tuple< Pass::Id, i64 >& b ) {
+            return std::get< 1 >( a ) > std::get< 1 >( b );
+        } );
+
+    for( auto element : m_schedule )
+    {
+        const auto passId = std::get< 0 >( element );
+        const auto edgeWeight = std::get< 1 >( element );
+        const auto pass = PassRegistry::passInfo( passId );
+        log.debug( "%4i: %s", edgeWeight, pass.name().c_str() );
+    }
+
+    log.debug( "scheduling: done" );
 
     return true;
 }

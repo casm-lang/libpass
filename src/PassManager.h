@@ -47,7 +47,8 @@
 #include <libpass/PassResult>
 #include <libpass/PassUsage>
 
-#include <libstdhl/log/Chronograph>
+#include <unordered_map>
+#include <unordered_set>
 
 /**
    @brief    TODO
@@ -65,15 +66,18 @@ namespace libpass
         PassManager( void );
 
         template < typename T >
-        void add( std::function< void( T& ) > action = nullptr )
+        void add( void )
         {
-            if( action )
-            {
-                PassRegistry::passSetup< T >( action );
-            }
-
             add( PassRegistry::passInfo< T >().id() );
         }
+
+        template < typename T >
+        void set( std::function< void( T& ) > action )
+        {
+            PassRegistry::passSetup< T >( action );
+        }
+
+        const std::unordered_set< Pass::Id >& passes( void ) const;
 
         template < typename T >
         void setDefaultPass( void )
@@ -83,27 +87,31 @@ namespace libpass
 
         void setDefaultResult( const PassResult& pr );
 
+        const PassResult& result( void ) const;
+
+        u1 run( const std::function< void( void ) >& flush = nullptr );
+
       private:
         void add( Pass::Id info );
 
         void setDefaultPass( Pass::Id defaultPass );
 
-      public:
-        u1 run( const std::function< void( void ) >& flush = nullptr );
+        void process( const Pass::Id passSelectionId, const Pass::Id passDependecyId );
 
-        const PassResult& result( void ) const;
-
-      private:
-        std::unordered_set< Pass::Id > m_managed;
-        std::unordered_set< Pass::Id > m_selected;
-        std::unordered_set< Pass::Id > m_start_points;
-        std::unordered_map< Pass::Id, PassUsage > m_usages;
-        std::unordered_map< Pass::Id, std::unordered_set< Pass::Id > > m_provides;
-        Pass::Id m_default_pass;
-        PassResult m_default_result;
-        PassResult m_result;
+        void schedule( const Pass::Id passId );
 
         u1 run( PassResult& pr ) override;
+
+        Pass::Id m_defaultPass;
+        PassResult m_defaultResult;
+        PassResult m_result;
+
+        std::unordered_set< Pass::Id > m_passes;
+        std::unordered_set< Pass::Id > m_selected;
+        std::unordered_map< Pass::Id, std::unordered_set< Pass::Id > > m_paths;
+        std::unordered_map< Pass::Id, PassUsage > m_passUsages;
+        std::unordered_map< Pass::Id, i64 > m_passWeights;
+        std::vector< std::tuple< Pass::Id, i64 > > m_schedule;
     };
 }
 

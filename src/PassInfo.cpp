@@ -39,82 +39,105 @@
 //  statement from your version.
 //
 
-#ifndef _LIBPASS_LOAD_FILE_PASS_H_
-#define _LIBPASS_LOAD_FILE_PASS_H_
+#include "PassInfo.h"
 
-#include <libpass/Pass>
-#include <libpass/PassData>
-#include <libpass/PassResult>
-#include <libpass/PassUsage>
+using namespace libpass;
 
-#include <libstdhl/file/TextDocument>
-
-#include <ios>
-#include <sstream>
-#include <streambuf>
-
-/**
-   @brief    TODO
-
-   TODO
-*/
-
-namespace libpass
+PassInfo::PassInfo(
+    const Pass::Id passID,
+    const std::string& passName,
+    const std::string& passDescription,
+    Pass::Constructor passConstructor,
+    Pass::Constructor passInternalCtor,
+    const char* passArgStr,
+    const char passArgChar,
+    std::function< i32( const char* ) > passArgAction )
+: m_id( passID )
+, m_name( passName )
+, m_description( passDescription )
+, m_constructor( passConstructor )
+, m_internal_ctor( passInternalCtor )
+, m_arg_str( passArgStr )
+, m_arg_char( passArgChar )
+, m_arg_action( passArgAction )
+, m_arg_selected( false )
+, m_changes( 0 )
 {
-    class LoadFilePass final : public Pass
-    {
-      public:
-        static char id;
+}
 
-        u1 run( libpass::PassResult& pr ) override;
-
-        class Input : public PassData
-        {
-          public:
-            using Ptr = std::shared_ptr< Input >;
-
-            Input( const std::string& filename, const std::ios::openmode mode = std::ios::in );
-
-            std::string filename( void ) const;
-
-            const std::ios::openmode mode( void ) const;
-
-            void setWritable( const u1 enable );
-            u1 isWritable( void ) const;
-
-            void setOverwrite( const u1 enable );
-            u1 isOverwrite( void ) const;
-
-            void setAppend( const u1 enable );
-            u1 isAppend( void ) const;
-
-            void setBinary( const u1 enable );
-            u1 isBinary( void ) const;
-
-          private:
-            std::string m_filename;
-            std::ios::openmode m_mode;
-        };
-
-        class Output : public Input
-        {
-          public:
-            using Ptr = std::shared_ptr< Output >;
-
-            Output( const std::string& filename, const std::ios::openmode mode = std::ios::in );
-
-            Output( const libstdhl::File::TextDocument& file );
-
-            std::iostream& stream( void );
-
-          private:
-            std::fstream m_fstream;
-            std::iostream m_stream;
-        };
+PassInfo::PassInfo(
+    const Pass::Id passID,
+    const std::string& passName,
+    const std::string& passDescription,
+    Pass::Constructor passConstructor,
+    Pass::Constructor passInternalCtor,
+    const char* passArgStr,
+    const char passArgChar )
+: m_id( passID )
+, m_name( passName )
+, m_description( passDescription )
+, m_constructor( passConstructor )
+, m_internal_ctor( passInternalCtor )
+, m_arg_str( passArgStr )
+, m_arg_char( passArgChar )
+, m_arg_selected( false )
+, m_changes( 0 )
+{
+    m_arg_action = [this]( const char* arg ) {
+        this->m_arg_selected = true;
+        return 0;
     };
 }
 
-#endif  // _LIBPASS_LOAD_FILE_PASS_H_
+const Pass::Id PassInfo::id( void ) const
+{
+    return m_id;
+}
+
+std::string PassInfo::name( void ) const
+{
+    return m_name;
+}
+
+std::string PassInfo::description( void ) const
+{
+    return m_description;
+}
+
+const char* PassInfo::argString( void ) const
+{
+    return m_arg_str;
+}
+
+const char PassInfo::argChar( void ) const
+{
+    return m_arg_char;
+}
+
+const std::function< i32( const char* ) >& PassInfo::argAction( void ) const
+{
+    return m_arg_action;
+}
+
+const u1 PassInfo::isArgSelected( void ) const
+{
+    return m_arg_selected;
+}
+
+u1 PassInfo::isPassId( const Pass::Id passID ) const
+{
+    return m_id == passID;
+}
+
+void PassInfo::addChanges( u64 change )
+{
+    m_changes += change;
+}
+
+u64 PassInfo::changes( void )
+{
+    return m_changes;
+}
 
 //
 //  Local variables:

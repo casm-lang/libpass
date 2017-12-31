@@ -39,82 +39,76 @@
 //  statement from your version.
 //
 
-#ifndef _LIBPASS_LOAD_FILE_PASS_H_
-#define _LIBPASS_LOAD_FILE_PASS_H_
+#include "main.h"
 
-#include <libpass/Pass>
-#include <libpass/PassData>
-#include <libpass/PassResult>
-#include <libpass/PassUsage>
+using namespace libpass;
 
-#include <libstdhl/file/TextDocument>
-
-#include <ios>
-#include <sstream>
-#include <streambuf>
-
-/**
-   @brief    TODO
-
-   TODO
-*/
-
-namespace libpass
+TEST( libpass_PassManager, run )
 {
-    class LoadFilePass final : public Pass
-    {
-      public:
-        static char id;
+    PassManager pm;
 
-        u1 run( libpass::PassResult& pr ) override;
+    libstdhl::Logger log( pm.stream() );
+    log.setSource( libstdhl::Memory::make< libstdhl::Log::Source >( TEST_NAME, TEST_NAME ) );
 
-        class Input : public PassData
-        {
-          public:
-            using Ptr = std::shared_ptr< Input >;
-
-            Input( const std::string& filename, const std::ios::openmode mode = std::ios::in );
-
-            std::string filename( void ) const;
-
-            const std::ios::openmode mode( void ) const;
-
-            void setWritable( const u1 enable );
-            u1 isWritable( void ) const;
-
-            void setOverwrite( const u1 enable );
-            u1 isOverwrite( void ) const;
-
-            void setAppend( const u1 enable );
-            u1 isAppend( void ) const;
-
-            void setBinary( const u1 enable );
-            u1 isBinary( void ) const;
-
-          private:
-            std::string m_filename;
-            std::ios::openmode m_mode;
-        };
-
-        class Output : public Input
-        {
-          public:
-            using Ptr = std::shared_ptr< Output >;
-
-            Output( const std::string& filename, const std::ios::openmode mode = std::ios::in );
-
-            Output( const libstdhl::File::TextDocument& file );
-
-            std::iostream& stream( void );
-
-          private:
-            std::fstream m_fstream;
-            std::iostream m_stream;
-        };
+    auto flush = [&pm]() {
+        libstdhl::Log::ApplicationFormatter f( TEST_NAME );
+        libstdhl::Log::OutputStreamSink c( std::cerr, f );
+        pm.stream().flush( c );
     };
+
+    EXPECT_EQ( pm.run( flush ), false );
 }
 
-#endif  // _LIBPASS_LOAD_FILE_PASS_H_
+TEST( libpass_PassManager, defaultPass )
+{
+    PassManager pm;
+
+    libstdhl::Logger log( pm.stream() );
+    log.setSource( libstdhl::Memory::make< libstdhl::Log::Source >( TEST_NAME, TEST_NAME ) );
+
+    auto flush = [&pm]() {
+        libstdhl::Log::ApplicationFormatter f( TEST_NAME );
+        libstdhl::Log::OutputStreamSink c( std::cerr, f );
+        pm.stream().flush( c );
+    };
+
+    pm.add< LoadFilePass >();
+    pm.setDefaultPass< LoadFilePass >();
+
+    EXPECT_EQ( pm.run( flush ), false );
+}
+
+TEST( libpass_PassManager, defaultPass_and_defaultResult )
+{
+    PassManager pm;
+
+    libstdhl::Logger log( pm.stream() );
+    log.setSource( libstdhl::Memory::make< libstdhl::Log::Source >( TEST_NAME, TEST_NAME ) );
+
+    auto flush = [&pm]() {
+        libstdhl::Log::ApplicationFormatter f( TEST_NAME );
+        libstdhl::Log::OutputStreamSink c( std::cerr, f );
+        pm.stream().flush( c );
+    };
+
+    pm.add< LoadFilePass >();
+    pm.setDefaultPass< LoadFilePass >();
+
+    const std::string filename = TEST_NAME + ".txt";
+    const auto input = libstdhl::Memory::make< LoadFilePass::Input >( filename );
+    input->setWritable( true );
+    input->setOverwrite( true );
+
+    PassResult pr;
+    pr.setInputData< LoadFilePass >( input );
+    pm.setDefaultResult( pr );
+
+    EXPECT_EQ( pm.run( flush ), true );
+
+    EXPECT_EQ( libstdhl::File::exists( filename ), true );
+    libstdhl::File::remove( filename );
+    EXPECT_EQ( libstdhl::File::exists( filename ), false );
+}
 
 //
 //  Local variables:

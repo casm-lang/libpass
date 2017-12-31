@@ -45,6 +45,10 @@ using namespace libpass;
 
 PassUsage::PassUsage( void )
 : m_terminate( false )
+, m_requires()
+, m_provides()
+, m_schedulesBefore()
+, m_schedulesAfter()
 {
 }
 
@@ -58,19 +62,9 @@ void PassUsage::setTerminate( u1 terminate )
     m_terminate = terminate;
 }
 
-void PassUsage::require( Pass::Id id )
-{
-    m_requires.insert( id );
-}
-
 PassUsage::Set PassUsage::requires( void ) const
 {
     return m_requires;
-}
-
-void PassUsage::provide( Pass::Id id )
-{
-    m_provides.insert( id );
 }
 
 PassUsage::Set PassUsage::provides( void ) const
@@ -78,9 +72,9 @@ PassUsage::Set PassUsage::provides( void ) const
     return m_provides;
 }
 
-void PassUsage::scheduleBefore( Pass::Id id )
+PassUsage::Set PassUsage::schedulesAfter( void ) const
 {
-    m_schedulesBefore.insert( id );
+    return m_schedulesAfter;
 }
 
 PassUsage::Set PassUsage::schedulesBefore( void ) const
@@ -88,14 +82,24 @@ PassUsage::Set PassUsage::schedulesBefore( void ) const
     return m_schedulesBefore;
 }
 
+void PassUsage::require( Pass::Id id )
+{
+    m_requires.insert( id );
+}
+
+void PassUsage::provide( Pass::Id id )
+{
+    m_provides.insert( id );
+}
+
 void PassUsage::scheduleAfter( Pass::Id id )
 {
     m_schedulesAfter.insert( id );
 }
 
-PassUsage::Set PassUsage::schedulesAfter( void ) const
+void PassUsage::scheduleBefore( Pass::Id id )
 {
-    return m_schedulesAfter;
+    m_schedulesBefore.insert( id );
 }
 
 //

@@ -39,8 +39,8 @@
 //  statement from your version.
 //
 
-#ifndef _LIBPASS_PASSREGISTRY_H_
-#define _LIBPASS_PASSREGISTRY_H_
+#ifndef _LIBPASS_PASS_REGISTRY_H_
+#define _LIBPASS_PASS_REGISTRY_H_
 
 #include <libpass/PassInfo>
 
@@ -54,54 +54,20 @@ namespace libpass
 {
     class PassRegistry
     {
-      private:
-        static std::unordered_map< Pass::Id, PassInfo* >& m_registeredPasses( void )
-        {
-            static std::unordered_map< Pass::Id, PassInfo* > cache;
-            return cache;
-        }
-
       public:
-        PassRegistry()
-        {
-            assert( 0 && "PassRegistry class is a static-only non-object class!" );
-        }
+        PassRegistry( void );
 
-        static void registerPass( PassInfo* passInfo )
-        {
-            assert( passInfo != 0 && "invalid pass info object pointer" );
-            assert(
-                passInfo and
-                "invalid pass info object, "
-                "tried to registered null pointer pass info!" );
+        static void registerPass( PassInfo* passInfo );
 
-            registeredPasses()[ passInfo->id() ] = passInfo;
-
-            // TODO: add checks for redundant argument names etc.
-        }
-
-        static std::unordered_map< Pass::Id, PassInfo* >& registeredPasses( void )
-        {
-            return m_registeredPasses();
-        }
-
-        static PassInfo& passInfo( Pass::Id id )
-        {
-            PassInfo* pi = static_cast< PassInfo* >( registeredPasses()[ id ] );
-
-            assert(
-                pi and
-                "invalid pass info object, "
-                "tried to access an unregistered pass!" );
-
-            return *pi;
-        }
+        static std::unordered_map< Pass::Id, PassInfo* >& registeredPasses( void );
 
         template < typename T >
         static PassInfo& passInfo( void )
         {
             return passInfo( &T::id );
         }
+
+        static PassInfo& passInfo( Pass::Id id );
 
         template < typename T >
         static std::function< void( T& ) >& passSetup(
@@ -114,6 +80,13 @@ namespace libpass
                 cache = action;
             }
 
+            return cache;
+        }
+
+      private:
+        static std::unordered_map< Pass::Id, PassInfo* >& m_registeredPasses( void )
+        {
+            static std::unordered_map< Pass::Id, PassInfo* > cache;
             return cache;
         }
     };
@@ -155,7 +128,7 @@ namespace libpass
     };
 }
 
-#endif  // _LIBPASS_PASSREGISTRY_H_
+#endif  // _LIBPASS_PASS_REGISTRY_H_
 
 //
 //  Local variables:

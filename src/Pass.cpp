@@ -39,82 +39,41 @@
 //  statement from your version.
 //
 
-#ifndef _LIBPASS_LOAD_FILE_PASS_H_
-#define _LIBPASS_LOAD_FILE_PASS_H_
+#include "Pass.h"
 
-#include <libpass/Pass>
-#include <libpass/PassData>
-#include <libpass/PassResult>
-#include <libpass/PassUsage>
+using namespace libpass;
 
-#include <libstdhl/file/TextDocument>
-
-#include <ios>
-#include <sstream>
-#include <streambuf>
-
-/**
-   @brief    TODO
-
-   TODO
-*/
-
-namespace libpass
+Pass::Pass( void )
+: m_stream( *libstdhl::Log::Stream::defaultStream() )
 {
-    class LoadFilePass final : public Pass
-    {
-      public:
-        static char id;
-
-        u1 run( libpass::PassResult& pr ) override;
-
-        class Input : public PassData
-        {
-          public:
-            using Ptr = std::shared_ptr< Input >;
-
-            Input( const std::string& filename, const std::ios::openmode mode = std::ios::in );
-
-            std::string filename( void ) const;
-
-            const std::ios::openmode mode( void ) const;
-
-            void setWritable( const u1 enable );
-            u1 isWritable( void ) const;
-
-            void setOverwrite( const u1 enable );
-            u1 isOverwrite( void ) const;
-
-            void setAppend( const u1 enable );
-            u1 isAppend( void ) const;
-
-            void setBinary( const u1 enable );
-            u1 isBinary( void ) const;
-
-          private:
-            std::string m_filename;
-            std::ios::openmode m_mode;
-        };
-
-        class Output : public Input
-        {
-          public:
-            using Ptr = std::shared_ptr< Output >;
-
-            Output( const std::string& filename, const std::ios::openmode mode = std::ios::in );
-
-            Output( const libstdhl::File::TextDocument& file );
-
-            std::iostream& stream( void );
-
-          private:
-            std::fstream m_fstream;
-            std::iostream m_stream;
-        };
-    };
 }
 
-#endif  // _LIBPASS_LOAD_FILE_PASS_H_
+void Pass::usage( PassUsage& pu )
+{
+}
+
+void Pass::initialize( void )
+{
+}
+
+u1 Pass::verify( void ) const
+{
+    return true;
+}
+
+void Pass::finalize( void )
+{
+}
+
+libstdhl::Log::Stream& Pass::stream( void )
+{
+    return m_stream;
+}
+
+void Pass::setStream( libstdhl::Log::Stream& stream )
+{
+    m_stream = stream;
+}
 
 //
 //  Local variables:

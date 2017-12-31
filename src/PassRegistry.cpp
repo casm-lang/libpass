@@ -39,82 +39,44 @@
 //  statement from your version.
 //
 
-#ifndef _LIBPASS_LOAD_FILE_PASS_H_
-#define _LIBPASS_LOAD_FILE_PASS_H_
+#include "PassRegistry.h"
 
-#include <libpass/Pass>
-#include <libpass/PassData>
-#include <libpass/PassResult>
-#include <libpass/PassUsage>
+using namespace libpass;
 
-#include <libstdhl/file/TextDocument>
-
-#include <ios>
-#include <sstream>
-#include <streambuf>
-
-/**
-   @brief    TODO
-
-   TODO
-*/
-
-namespace libpass
+PassRegistry::PassRegistry( void )
 {
-    class LoadFilePass final : public Pass
-    {
-      public:
-        static char id;
-
-        u1 run( libpass::PassResult& pr ) override;
-
-        class Input : public PassData
-        {
-          public:
-            using Ptr = std::shared_ptr< Input >;
-
-            Input( const std::string& filename, const std::ios::openmode mode = std::ios::in );
-
-            std::string filename( void ) const;
-
-            const std::ios::openmode mode( void ) const;
-
-            void setWritable( const u1 enable );
-            u1 isWritable( void ) const;
-
-            void setOverwrite( const u1 enable );
-            u1 isOverwrite( void ) const;
-
-            void setAppend( const u1 enable );
-            u1 isAppend( void ) const;
-
-            void setBinary( const u1 enable );
-            u1 isBinary( void ) const;
-
-          private:
-            std::string m_filename;
-            std::ios::openmode m_mode;
-        };
-
-        class Output : public Input
-        {
-          public:
-            using Ptr = std::shared_ptr< Output >;
-
-            Output( const std::string& filename, const std::ios::openmode mode = std::ios::in );
-
-            Output( const libstdhl::File::TextDocument& file );
-
-            std::iostream& stream( void );
-
-          private:
-            std::fstream m_fstream;
-            std::iostream m_stream;
-        };
-    };
+    assert( 0 && "PassRegistry class is a static-only non-object class!" );
 }
 
-#endif  // _LIBPASS_LOAD_FILE_PASS_H_
+void PassRegistry::registerPass( PassInfo* passInfo )
+{
+    assert( passInfo != 0 && "invalid pass info object pointer" );
+    assert(
+        passInfo and
+        "invalid pass info object, "
+        "tried to registered null pointer pass info!" );
+
+    registeredPasses()[ passInfo->id() ] = passInfo;
+
+    // TODO: add checks for redundant argument names etc.
+}
+
+std::unordered_map< Pass::Id, PassInfo* >& PassRegistry::registeredPasses( void )
+{
+    return m_registeredPasses();
+}
+
+PassInfo& PassRegistry::passInfo( Pass::Id id )
+{
+    PassInfo* pi = static_cast< PassInfo* >( registeredPasses()[ id ] );
+
+    assert(
+        pi and
+        "invalid pass info object, "
+        "tried to access an unregistered pass!" );
+
+    return *pi;
+}
 
 //
 //  Local variables:

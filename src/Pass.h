@@ -67,41 +67,23 @@ namespace libpass
 
         typedef std::shared_ptr< Pass > ( *Constructor )();
 
-        Pass( void )
-        : m_stream( *libstdhl::Log::Stream::defaultStream() )
-        {
-        }
+        Pass( void );
 
         virtual ~Pass() = default;
 
-        virtual void usage( PassUsage& pu )
-        {
-        }
+        virtual void usage( PassUsage& pu );
 
-        virtual void initialize( void )
-        {
-        }
+        virtual void initialize( void );
 
         virtual u1 run( PassResult& pr ) = 0;
 
-        virtual u1 verify( void ) const
-        {
-            return true;
-        }
+        virtual u1 verify( void ) const;
 
-        virtual void finalize( void )
-        {
-        }
+        virtual void finalize( void );
 
-        virtual libstdhl::Log::Stream& stream( void ) final
-        {
-            return m_stream;
-        }
+        virtual libstdhl::Log::Stream& stream( void ) final;
 
-        virtual void setStream( libstdhl::Log::Stream& stream ) final
-        {
-            m_stream = stream;
-        }
+        virtual void setStream( libstdhl::Log::Stream& stream ) final;
 
       private:
         libstdhl::Log::Stream& m_stream;

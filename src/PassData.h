@@ -39,8 +39,8 @@
 //  statement from your version.
 //
 
-#ifndef _LIBPASS_PASSDATA_H_
-#define _LIBPASS_PASSDATA_H_
+#ifndef _LIBPASS_PASS_DATA_H_
+#define _LIBPASS_PASS_DATA_H_
 
 #include <libpass/Pass>
 
@@ -57,12 +57,12 @@ namespace libpass
       public:
         using Ptr = std::shared_ptr< PassData >;
 
-        PassData() = default;
-        ~PassData() = default;
+        PassData( void ) = default;
+        ~PassData( void ) = default;
     };
 }
 
-#endif  // _LIBPASS_PASSDATA_H_
+#endif  // _LIBPASS_PASS_DATA_H_
 
 //
 //  Local variables:

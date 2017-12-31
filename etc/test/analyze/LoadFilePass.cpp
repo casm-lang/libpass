@@ -53,9 +53,9 @@ TEST( libpass_analyze_LoadFilePass, run_and_log )
     std::string filename = TEST_NAME + ".txt";
 
     PassResult r;
+    r.setInput< LoadFilePass >( filename );
 
     LoadFilePass p;
-    p.setFilename( filename );
 
     EXPECT_EQ( libstdhl::File::exists( filename ), false );
 
@@ -72,11 +72,13 @@ TEST( libpass_analyze_LoadFilePass, writable_run_log )
 {
     std::string filename = TEST_NAME + ".txt";
 
+    const auto input = libstdhl::Memory::make< LoadFilePass::Input >( filename );
+    input->setWritable( true );
+
     PassResult r;
+    r.setInputData< LoadFilePass >( input );
 
     LoadFilePass p;
-    p.setFilename( filename );
-    p.setWritable( true );
 
     EXPECT_EQ( libstdhl::File::exists( filename ), false );
 
@@ -93,12 +95,14 @@ TEST( libpass_analyze_LoadFilePass, writable_overwrite_run_log )
 {
     std::string filename = TEST_NAME + ".txt";
 
+    const auto input = libstdhl::Memory::make< LoadFilePass::Input >( filename );
+    input->setWritable( true );
+    input->setOverwrite( true );
+
     PassResult r;
+    r.setInputData< LoadFilePass >( input );
 
     LoadFilePass p;
-    p.setFilename( filename );
-    p.setWritable( true );
-    p.setOverwrite( true );
 
     EXPECT_EQ( libstdhl::File::exists( filename ), false );
 

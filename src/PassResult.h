@@ -39,10 +39,12 @@
 //  statement from your version.
 //
 
-#ifndef _LIBPASS_PASSRESULT_H_
-#define _LIBPASS_PASSRESULT_H_
+#ifndef _LIBPASS_PASS_RESULT_H_
+#define _LIBPASS_PASS_RESULT_H_
 
 #include <libpass/PassData>
+
+#include <libstdhl/Memory>
 
 #include <unordered_map>
 
@@ -59,80 +61,141 @@ namespace libpass
       public:
         using Ptr = std::shared_ptr< PassResult >;
 
-        PassResult( void )
-        {
-        }
+        PassResult( void );
 
-        ~PassResult( void )
+        ~PassResult( void ) = default;
+
+        template < typename PassName >
+        inline u1 status( void )
         {
-            m_results.clear();
-            m_changes.clear();
+            return status( &PassName::id );
         }
 
         template < typename PassName >
-        typename PassName::Data::Ptr result( void ) const
+        inline u1 hasStatus( void ) const
         {
-            return std::static_pointer_cast< typename PassName::Data >( result( &PassName::id ) );
+            return hasStatus( &PassName::id );
         }
 
-        PassData::Ptr result( const Pass::Id id ) const
-        {
-            const auto it = m_results.find( id );
-            return ( it != m_results.cend() ) ? it->second : nullptr;
-        }
+        u1 hasStatus( const Pass::Id id ) const;
 
         template < typename PassName >
-        void setResult( const typename PassName::Data::Ptr& result )
+        inline void setStatus( u1 status )
         {
-            m_results[&PassName::id ] = result;
+            setStatus( &PassName::id, status );
         }
 
-        const std::unordered_map< Pass::Id, PassData::Ptr >& results( void ) const
-        {
-            return m_results;
-        }
+        void setStatus( Pass::Id id, u1 status );
 
-        void printAllResults( void )
-        {
-            // TODO
-        }
+        const std::unordered_map< Pass::Id, u1 >& statuses( void ) const;
 
         template < typename PassName >
-        u64 change( void )
+        inline u64 change( void )
         {
             return change( &PassName::id );
         }
 
-        u64 change( const Pass::Id id )
+        template < typename PassName >
+        inline u1 hasChange( void ) const
         {
-            return m_changes[ id ];
+            return hasChange( &PassName::id );
         }
 
+        u1 hasChange( const Pass::Id id ) const;
+
         template < typename PassName >
-        void setChange( u64 passChanges )
+        inline void setChange( u64 passChanges )
         {
             setChange( &PassName::id, passChanges );
         }
 
-        void setChange( Pass::Id id, u64 passChanges )
+        const std::unordered_map< Pass::Id, u64 >& changes( void ) const;
+
+        template < typename PassName >
+        typename PassName::Input::Ptr input( void ) const
         {
-            m_changes[ id ] = passChanges;
+            return std::static_pointer_cast< typename PassName::Input >( input( &PassName::id ) );
         }
 
-        friend std::ostream& operator<<( std::ostream& os, PassResult& pr )
+        template < typename PassName >
+        inline u1 hasInput( void ) const
         {
-            // TODO
-            return os;
+            return hasInput( &PassName::id );
         }
+
+        u1 hasInput( const Pass::Id id ) const;
+
+        template < typename PassName, typename... Args >
+        inline void setInput( Args&&... args )
+        {
+            const auto data = libstdhl::Memory::make< typename PassName::Input >(
+                std::forward< Args >( args )... );
+            setInputData< PassName >( data );
+        }
+
+        template < typename PassName >
+        inline void setInputData( const typename PassName::Input::Ptr& data )
+        {
+            setInput( &PassName::id, data );
+        }
+
+        const std::unordered_map< Pass::Id, PassData::Ptr >& inputs( void ) const;
+
+        template < typename PassName >
+        typename PassName::Output::Ptr output( void ) const
+        {
+            return std::static_pointer_cast< typename PassName::Output >( output( &PassName::id ) );
+        }
+
+        template < typename PassName >
+        inline u1 hasOutput( void ) const
+        {
+            return hasOutput( &PassName::id );
+        }
+
+        u1 hasOutput( const Pass::Id id ) const;
+
+        template < typename PassName, typename... Args >
+        inline void setOutput( Args&&... args )
+        {
+            const auto data = libstdhl::Memory::make< typename PassName::Output >(
+                std::forward< Args >( args )... );
+            setOutputData< PassName >( data );
+        }
+
+        template < typename PassName >
+        inline void setOutputData( const typename PassName::Output::Ptr& data )
+        {
+            setOutput( &PassName::id, data );
+        }
+
+        const std::unordered_map< Pass::Id, PassData::Ptr >& outputs( void ) const;
+
+        u1 hasPreviousPass( void ) const;
+
+        Pass::Id previousPass( void ) const;
 
       private:
-        std::unordered_map< Pass::Id, PassData::Ptr > m_results;
+        u1 status( const Pass::Id id );
 
+        u64 change( const Pass::Id id );
+        void setChange( Pass::Id id, u64 passChanges );
+
+        PassData::Ptr input( const Pass::Id id ) const;
+        void setInput( const Pass::Id id, const PassData::Ptr& data );
+
+        PassData::Ptr output( const Pass::Id id ) const;
+        void setOutput( const Pass::Id id, const PassData::Ptr& data );
+
+        std::unordered_map< Pass::Id, u1 > m_statuses;
         std::unordered_map< Pass::Id, u64 > m_changes;
+        std::unordered_map< Pass::Id, PassData::Ptr > m_inputs;
+        std::unordered_map< Pass::Id, PassData::Ptr > m_outputs;
+        Pass::Id m_previousPass;
     };
 }
 
-#endif  // _LIBPASS_PASSRESULT_H_
+#endif  // _LIBPASS_PASS_RESULT_H_
 
 //
 //  Local variables:

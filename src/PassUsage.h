@@ -39,8 +39,8 @@
 //  statement from your version.
 //
 
-#ifndef _LIBPASS_PASSUSAGE_H_
-#define _LIBPASS_PASSUSAGE_H_
+#ifndef _LIBPASS_PASS_USAGE_H_
+#define _LIBPASS_PASS_USAGE_H_
 
 #include <libpass/Pass>
 
@@ -65,8 +65,6 @@ namespace libpass
 
         void setTerminate( u1 terminate );
 
-        void require( Pass::Id id );
-
         template < typename PassName >
         void require( void )
         {
@@ -74,8 +72,6 @@ namespace libpass
         }
 
         Set requires( void ) const;
-
-        void provide( Pass::Id id );
 
         template < typename PassName >
         void provide( void )
@@ -85,7 +81,13 @@ namespace libpass
 
         Set provides( void ) const;
 
-        void scheduleBefore( Pass::Id id );
+        template < typename PassName >
+        void scheduleAfter( void )
+        {
+            scheduleAfter( &PassName::id );
+        }
+
+        Set schedulesAfter( void ) const;
 
         template < typename PassName >
         void scheduleBefore( void )
@@ -95,19 +97,16 @@ namespace libpass
 
         Set schedulesBefore( void ) const;
 
+      private:
+        void require( Pass::Id id );
+
+        void provide( Pass::Id id );
+
         void scheduleAfter( Pass::Id id );
 
-        template < typename PassName >
-        void scheduleAfter( void )
-        {
-            scheduleAfter( &PassName::id );
-        }
+        void scheduleBefore( Pass::Id id );
 
-        Set schedulesAfter( void ) const;
-
-      private:
         u1 m_terminate;
-
         Set m_requires;
         Set m_provides;
         Set m_schedulesBefore;
@@ -115,7 +114,7 @@ namespace libpass
     };
 }
 
-#endif  // _LIBPASS_PASSUSAGE_H_
+#endif  // _LIBPASS_PASS_USAGE_H_
 
 //
 //  Local variables:

@@ -39,96 +39,44 @@
 //  statement from your version.
 //
 
-#ifndef _LIBPASS_PASS_REGISTRY_H_
-#define _LIBPASS_PASS_REGISTRY_H_
+#include "PassRegistry.h"
 
-#include <libpass/PassInfo>
+using namespace libpass;
 
-/**
-   @brief    TODO
-
-   TODO
-*/
-
-namespace libpass
+PassRegistry::PassRegistry( void )
 {
-    class PassRegistry
-    {
-      public:
-        PassRegistry( void );
-
-        static void registerPass( PassInfo* passInfo );
-
-        static std::unordered_map< Pass::Id, PassInfo* >& registeredPasses( void );
-
-        template < typename T >
-        static PassInfo& passInfo( void )
-        {
-            return passInfo( &T::id );
-        }
-
-        static PassInfo& passInfo( Pass::Id id );
-
-        template < typename T >
-        static std::function< void( T& ) >& passSetup(
-            const std::function< void( T& ) >& action = nullptr )
-        {
-            static std::function< void( T& ) > cache = []( T& ) {};
-
-            if( action )
-            {
-                cache = action;
-            }
-
-            return cache;
-        }
-
-      private:
-        static std::unordered_map< Pass::Id, PassInfo* >& m_registeredPasses( void )
-        {
-            static std::unordered_map< Pass::Id, PassInfo* > cache;
-            return cache;
-        }
-    };
-
-    template < typename T >
-    std::shared_ptr< Pass > defaultConstructor()
-    {
-        auto pass = std::make_shared< T >();
-        PassRegistry::passSetup< T >()( *pass );
-        return pass;
-    }
-
-    template < typename T >
-    std::shared_ptr< Pass > internalConstructor()
-    {
-        return std::make_shared< T >();
-    }
-
-    template < typename T >
-    class PassRegistration : public PassInfo
-    {
-      public:
-        PassRegistration(
-            const char* passName,
-            const char* passDescription,
-            const char* passArgStr,
-            const char passArgChar )
-        : PassInfo(
-              &T::id,
-              passName,
-              passDescription,
-              Pass::Constructor( defaultConstructor< T > ),
-              Pass::Constructor( internalConstructor< T > ),
-              passArgStr,
-              passArgChar )
-        {
-            PassRegistry::registerPass( this );
-        }
-    };
+    assert( 0 && "PassRegistry class is a static-only non-object class!" );
 }
 
-#endif  // _LIBPASS_PASS_REGISTRY_H_
+void PassRegistry::registerPass( PassInfo* passInfo )
+{
+    assert( passInfo != 0 && "invalid pass info object pointer" );
+    assert(
+        passInfo and
+        "invalid pass info object, "
+        "tried to registered null pointer pass info!" );
+
+    registeredPasses()[ passInfo->id() ] = passInfo;
+
+    // TODO: add checks for redundant argument names etc.
+}
+
+std::unordered_map< Pass::Id, PassInfo* >& PassRegistry::registeredPasses( void )
+{
+    return m_registeredPasses();
+}
+
+PassInfo& PassRegistry::passInfo( Pass::Id id )
+{
+    PassInfo* pi = static_cast< PassInfo* >( registeredPasses()[ id ] );
+
+    assert(
+        pi and
+        "invalid pass info object, "
+        "tried to access an unregistered pass!" );
+
+    return *pi;
+}
 
 //
 //  Local variables:

@@ -57,8 +57,8 @@ namespace libpass
       public:
         using Ptr = std::shared_ptr< PassData >;
 
-        PassData() = default;
-        ~PassData() = default;
+        PassData( void ) = default;
+        ~PassData( void ) = default;
     };
 }
 

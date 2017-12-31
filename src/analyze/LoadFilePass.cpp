@@ -41,6 +41,10 @@
 
 #include "LoadFilePass.h"
 
+#include <libpass/PassInfo>
+#include <libpass/PassLogger>
+#include <libpass/PassRegistry>
+
 #include <libstdhl/File>
 #include <libstdhl/Log>
 #include <libstdhl/Memory>
@@ -50,17 +54,24 @@ using namespace libpass;
 char LoadFilePass::id = 0;
 
 static PassRegistration< LoadFilePass > PASS(
-    "Load File Pass", "checks if a file name exists and opens a file stream", 0, 0 );
+    "LoadFilePass", "checks if a file name exists and opens a file stream", 0, 0 );
 
 u1 LoadFilePass::run( libpass::PassResult& pr )
 {
     PassLogger log( &id, stream() );
 
+    if( not pr.hasInput< LoadFilePass >() )
+    {
+        log.error( "cannot found input data" );
+        return false;
+    }
+
     try
     {
-        pr.setResult< LoadFilePass >( libstdhl::Memory::make< Data >( m_filename, m_mode ) );
+        const auto input = pr.input< LoadFilePass >();
+        pr.setOutput< LoadFilePass >( input->filename(), input->mode() );
     }
-    catch( const std::invalid_argument& e )
+    catch( const std::exception& e )
     {
         log.error( e.what() );
         return false;
@@ -69,7 +80,28 @@ u1 LoadFilePass::run( libpass::PassResult& pr )
     return true;
 }
 
-void LoadFilePass::setWritable( const u1 enable )
+//
+//
+// LoadFilePass::Input
+//
+
+LoadFilePass::Input::Input( const std::string& filename, const std::ios::openmode mode )
+: m_filename( filename )
+, m_mode( mode )
+{
+}
+
+std::string LoadFilePass::Input::filename( void ) const
+{
+    return m_filename;
+}
+
+const std::ios::openmode LoadFilePass::Input::mode( void ) const
+{
+    return m_mode;
+}
+
+void LoadFilePass::Input::setWritable( const u1 enable )
 {
     if( enable )
     {
@@ -80,8 +112,12 @@ void LoadFilePass::setWritable( const u1 enable )
         m_mode &= ~std::ios::out;
     }
 }
+u1 LoadFilePass::Input::isWritable( void ) const
+{
+    return m_mode & std::ios::out;
+}
 
-void LoadFilePass::setOverwrite( const u1 enable )
+void LoadFilePass::Input::setOverwrite( const u1 enable )
 {
     if( enable )
     {
@@ -92,8 +128,12 @@ void LoadFilePass::setOverwrite( const u1 enable )
         m_mode &= ~std::ios::trunc;
     }
 }
+u1 LoadFilePass::Input::isOverwrite( void ) const
+{
+    return m_mode & std::ios::trunc;
+}
 
-void LoadFilePass::setAppend( const u1 enable )
+void LoadFilePass::Input::setAppend( const u1 enable )
 {
     if( enable )
     {
@@ -104,8 +144,12 @@ void LoadFilePass::setAppend( const u1 enable )
         m_mode &= ~std::ios::app;
     }
 }
+u1 LoadFilePass::Input::isAppend( void ) const
+{
+    return m_mode & std::ios::app;
+}
 
-void LoadFilePass::setBinary( const u1 enable )
+void LoadFilePass::Input::setBinary( const u1 enable )
 {
     if( enable )
     {
@@ -116,39 +160,31 @@ void LoadFilePass::setBinary( const u1 enable )
         m_mode &= ~std::ios::binary;
     }
 }
-
-void LoadFilePass::setFilename( const std::string& filename )
+u1 LoadFilePass::Input::isBinary( void ) const
 {
-    m_filename = filename;
+    return m_mode & std::ios::binary;
 }
 
-LoadFilePass::Data::Data( const std::string& filename, const std::ios::openmode mode )
-: m_filename( filename )
-, m_mode( mode )
-, m_fstream( libstdhl::File::open( m_filename, m_mode ) )
+//
+//
+// LoadFilePass::Output
+//
+
+LoadFilePass::Output::Output( const std::string& filename, const std::ios::openmode mode )
+: Input( filename, mode )
+, m_fstream( libstdhl::File::open( filename, mode ) )
 , m_stream( m_fstream.rdbuf() )
 {
 }
 
-LoadFilePass::Data::Data( const libstdhl::File::TextDocument& file )
-: m_filename( file.path().toString() )
-, m_mode( std::ios::in )
+LoadFilePass::Output::Output( const libstdhl::File::TextDocument& file )
+: Input( file.path().toString(), std::ios::in )
 , m_fstream()
 , m_stream( file.buffer() )
 {
 }
 
-std::string LoadFilePass::Data::filename( void ) const
-{
-    return m_filename;
-}
-
-u1 LoadFilePass::Data::writable( void ) const
-{
-    return m_mode & ( 1 << std::ios::out );
-}
-
-std::iostream& LoadFilePass::Data::stream( void )
+std::iostream& LoadFilePass::Output::stream( void )
 {
     m_stream.seekg( 0 );
     return m_stream;

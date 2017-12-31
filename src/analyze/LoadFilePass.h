@@ -44,13 +44,14 @@
 
 #include <libpass/Pass>
 #include <libpass/PassData>
-#include <libpass/PassInfo>
-#include <libpass/PassLogger>
-#include <libpass/PassRegistry>
 #include <libpass/PassResult>
 #include <libpass/PassUsage>
 
 #include <libstdhl/file/TextDocument>
+
+#include <ios>
+#include <sstream>
+#include <streambuf>
 
 /**
    @brief    TODO
@@ -67,47 +68,49 @@ namespace libpass
 
         u1 run( libpass::PassResult& pr ) override;
 
-        void setWritable( const u1 enable );
-
-        void setOverwrite( const u1 enable );
-
-        void setAppend( const u1 enable );
-
-        void setBinary( const u1 enable );
-
-        void setFilename( const std::string& filename );
-
-        class Data : public PassData
+        class Input : public PassData
         {
           public:
-            using Ptr = std::shared_ptr< Data >;
+            using Ptr = std::shared_ptr< Input >;
 
-            Data( const std::string& filename, const std::ios::openmode mode );
-
-            Data( const libstdhl::File::TextDocument& file );
+            Input( const std::string& filename, const std::ios::openmode mode = std::ios::in );
 
             std::string filename( void ) const;
 
-            u1 writable( void ) const;
+            const std::ios::openmode mode( void ) const;
 
-            u1 overwrite( void ) const;
+            void setWritable( const u1 enable );
+            u1 isWritable( void ) const;
 
-            u1 append( void ) const;
+            void setOverwrite( const u1 enable );
+            u1 isOverwrite( void ) const;
 
-            u1 binary( void ) const;
+            void setAppend( const u1 enable );
+            u1 isAppend( void ) const;
 
-            std::iostream& stream( void );
+            void setBinary( const u1 enable );
+            u1 isBinary( void ) const;
 
           private:
             std::string m_filename;
             std::ios::openmode m_mode;
+        };
+
+        class Output : public Input
+        {
+          public:
+            using Ptr = std::shared_ptr< Output >;
+
+            Output( const std::string& filename, const std::ios::openmode mode = std::ios::in );
+
+            Output( const libstdhl::File::TextDocument& file );
+
+            std::iostream& stream( void );
+
+          private:
             std::fstream m_fstream;
             std::iostream m_stream;
         };
-
-      private:
-        std::ios::openmode m_mode = std::ios::in;
-        std::string m_filename;
     };
 }
 

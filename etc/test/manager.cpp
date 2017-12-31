@@ -39,83 +39,76 @@
 //  statement from your version.
 //
 
-#ifndef _LIBPASS_PASS_MANAGER_H_
-#define _LIBPASS_PASS_MANAGER_H_
+#include "main.h"
 
-#include <libpass/Pass>
-#include <libpass/PassRegistry>
-#include <libpass/PassResult>
-#include <libpass/PassUsage>
+using namespace libpass;
 
-#include <unordered_map>
-#include <unordered_set>
-
-/**
-   @brief    TODO
-
-   TODO
-*/
-
-namespace libpass
+TEST( libpass_PassManager, run )
 {
-    class PassManager : public Pass
-    {
-      public:
-        static char id;
+    PassManager pm;
 
-        PassManager( void );
+    libstdhl::Logger log( pm.stream() );
+    log.setSource( libstdhl::Memory::make< libstdhl::Log::Source >( TEST_NAME, TEST_NAME ) );
 
-        template < typename T >
-        void add( void )
-        {
-            add( PassRegistry::passInfo< T >().id() );
-        }
-
-        template < typename T >
-        void set( std::function< void( T& ) > action )
-        {
-            PassRegistry::passSetup< T >( action );
-        }
-
-        const std::unordered_set< Pass::Id >& passes( void ) const;
-
-        template < typename T >
-        void setDefaultPass( void )
-        {
-            setDefaultPass( PassRegistry::passInfo< T >().id() );
-        }
-
-        void setDefaultResult( const PassResult& pr );
-
-        const PassResult& result( void ) const;
-
-        u1 run( const std::function< void( void ) >& flush = nullptr );
-
-      private:
-        void add( Pass::Id info );
-
-        void setDefaultPass( Pass::Id defaultPass );
-
-        void process( const Pass::Id passSelectionId, const Pass::Id passDependecyId );
-
-        void schedule( const Pass::Id passId );
-
-        u1 run( PassResult& pr ) override;
-
-        Pass::Id m_defaultPass;
-        PassResult m_defaultResult;
-        PassResult m_result;
-
-        std::unordered_set< Pass::Id > m_passes;
-        std::unordered_set< Pass::Id > m_selected;
-        std::unordered_map< Pass::Id, std::unordered_set< Pass::Id > > m_paths;
-        std::unordered_map< Pass::Id, PassUsage > m_passUsages;
-        std::unordered_map< Pass::Id, i64 > m_passWeights;
-        std::vector< std::tuple< Pass::Id, i64 > > m_schedule;
+    auto flush = [&pm]() {
+        libstdhl::Log::ApplicationFormatter f( TEST_NAME );
+        libstdhl::Log::OutputStreamSink c( std::cerr, f );
+        pm.stream().flush( c );
     };
+
+    EXPECT_EQ( pm.run( flush ), false );
 }
 
-#endif  // _LIBPASS_PASS_MANAGER_H_
+TEST( libpass_PassManager, defaultPass )
+{
+    PassManager pm;
+
+    libstdhl::Logger log( pm.stream() );
+    log.setSource( libstdhl::Memory::make< libstdhl::Log::Source >( TEST_NAME, TEST_NAME ) );
+
+    auto flush = [&pm]() {
+        libstdhl::Log::ApplicationFormatter f( TEST_NAME );
+        libstdhl::Log::OutputStreamSink c( std::cerr, f );
+        pm.stream().flush( c );
+    };
+
+    pm.add< LoadFilePass >();
+    pm.setDefaultPass< LoadFilePass >();
+
+    EXPECT_EQ( pm.run( flush ), false );
+}
+
+TEST( libpass_PassManager, defaultPass_and_defaultResult )
+{
+    PassManager pm;
+
+    libstdhl::Logger log( pm.stream() );
+    log.setSource( libstdhl::Memory::make< libstdhl::Log::Source >( TEST_NAME, TEST_NAME ) );
+
+    auto flush = [&pm]() {
+        libstdhl::Log::ApplicationFormatter f( TEST_NAME );
+        libstdhl::Log::OutputStreamSink c( std::cerr, f );
+        pm.stream().flush( c );
+    };
+
+    pm.add< LoadFilePass >();
+    pm.setDefaultPass< LoadFilePass >();
+
+    const std::string filename = TEST_NAME + ".txt";
+    const auto input = libstdhl::Memory::make< LoadFilePass::Input >( filename );
+    input->setWritable( true );
+    input->setOverwrite( true );
+
+    PassResult pr;
+    pr.setInputData< LoadFilePass >( input );
+    pm.setDefaultResult( pr );
+
+    EXPECT_EQ( pm.run( flush ), true );
+
+    EXPECT_EQ( libstdhl::File::exists( filename ), true );
+    libstdhl::File::remove( filename );
+    EXPECT_EQ( libstdhl::File::exists( filename ), false );
+}
 
 //
 //  Local variables:

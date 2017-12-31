@@ -48,5 +48,6 @@ include_directories(
 
 add_library( ${PROJECT}-test OBJECT
   main.cpp
+  manager.cpp
   analyze/LoadFilePass.cpp
   )

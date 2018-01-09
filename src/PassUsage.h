@@ -97,6 +97,14 @@ namespace libpass
 
         Set schedulesBefore( void ) const;
 
+        template < typename PassName >
+        void repeatUntil( void )
+        {
+            repeatUntil( &PassName::id );
+        }
+
+        Pass::Id repeatsUntil( void ) const;
+
       private:
         void require( Pass::Id id );
 
@@ -106,11 +114,14 @@ namespace libpass
 
         void scheduleBefore( Pass::Id id );
 
+        void repeatUntil( Pass::Id id );
+
         u1 m_terminate;
         Set m_requires;
         Set m_provides;
         Set m_schedulesBefore;
         Set m_schedulesAfter;
+        Pass::Id m_repeatUntil;
     };
 }
 

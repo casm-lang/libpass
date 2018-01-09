@@ -49,6 +49,7 @@ PassUsage::PassUsage( void )
 , m_provides()
 , m_schedulesBefore()
 , m_schedulesAfter()
+, m_repeatUntil( nullptr )
 {
 }
 
@@ -82,6 +83,11 @@ PassUsage::Set PassUsage::schedulesBefore( void ) const
     return m_schedulesBefore;
 }
 
+Pass::Id PassUsage::repeatsUntil( void ) const
+{
+    return m_repeatUntil;
+}
+
 void PassUsage::require( Pass::Id id )
 {
     m_requires.insert( id );
@@ -100,6 +106,11 @@ void PassUsage::scheduleAfter( Pass::Id id )
 void PassUsage::scheduleBefore( Pass::Id id )
 {
     m_schedulesBefore.insert( id );
+}
+
+void PassUsage::repeatUntil( Pass::Id id )
+{
+    m_repeatUntil = id;
 }
 
 //

@@ -104,6 +104,11 @@ void PassManager::process( const Pass::Id passId, const Pass::Id pathId )
         pass.constructInternalPass()->usage( passUsage );
     }
 
+    if( passUsage.repeatsUntil() )
+    {
+        process( passUsage.repeatsUntil(), passUsage.repeatsUntil() );
+    }
+
     std::vector< Pass::Id > dependencies;
     std::set_union(
         passUsage.requires().begin(),
@@ -151,6 +156,54 @@ void PassManager::schedule( const Pass::Id passId )
     }
 }
 
+u1 PassManager::runPass( const Pass::Id passId, const std::function< void( void ) >& flush )
+{
+    PassLogger log( &id, stream() );
+    libstdhl::Log::Chronograph swatch( true );
+    const auto pass = PassRegistry::passInfo( passId );
+
+    m_result.setStatus( passId, false );
+
+    auto p = pass.constructPass();
+    p->setStream( stream() );
+
+    p->initialize();
+
+    log.debug( "'" + pass.name() + "': running" );
+
+    if( flush )
+    {
+        flush();
+    }
+
+    const u1 statusRun = p->run( m_result );
+
+    log.debug( "'" + pass.name() + "': done (took: " + std::string( swatch ) + ")" );
+
+    u1 statusVerify = false;
+
+    if( statusRun )
+    {
+        statusVerify = p->verify();
+    }
+
+    p->finalize();
+
+    if( not statusRun or not statusVerify )
+    {
+        if( flush )
+        {
+            flush();
+        }
+
+        return false;
+    }
+
+    m_result.setStatus( passId, true );
+
+    return true;
+}
+
 u1 PassManager::run( const std::function< void( void ) >& flush )
 {
     PassLogger log( &id, stream() );
@@ -166,6 +219,7 @@ u1 PassManager::run( const std::function< void( void ) >& flush )
         return false;
     }
 
+    std::unordered_map< Pass::Id, Pass::Id > repeatUntil;
     u1 first = true;
     for( auto element : m_schedule )
     {
@@ -179,44 +233,34 @@ u1 PassManager::run( const std::function< void( void ) >& flush )
             continue;
         }
 
-        m_result.setStatus( passId, false );
-
-        auto p = pass.constructPass();
-        p->setStream( stream() );
-
-        p->initialize();
-
-        log.debug( "'" + pass.name() + "': running" );
-
-        if( flush )
+        if( not runPass( passId, flush ) )
         {
-            flush();
-        }
-
-        const u1 statusRun = p->run( m_result );
-
-        log.debug( "'" + pass.name() + "': done (took: " + std::string( swatch ) + ")" );
-
-        u1 statusVerify = false;
-
-        if( statusRun )
-        {
-            statusVerify = p->verify();
-        }
-
-        p->finalize();
-
-        if( not statusRun or not statusVerify )
-        {
-            if( flush )
-            {
-                flush();
-            }
-
             return false;
         }
 
-        m_result.setStatus( passId, true );
+        auto it = repeatUntil.begin();
+        while( it != repeatUntil.end() )
+        {
+            if( not runPass( it->first, flush ) )
+            {
+                return false;
+            }
+
+            if( it->second == passId )
+            {
+                repeatUntil.erase( it++ );
+            }
+            else
+            {
+                it++;
+            }
+        }
+
+        const auto& passUsage = m_passUsages[ passId ];
+        if( passUsage.repeatsUntil() )
+        {
+            repeatUntil.emplace( passId, passUsage.repeatsUntil() );
+        }
     }
 
     log.debug( "running passes: done (took: " + std::string( swatch ) + ")" );
@@ -270,7 +314,14 @@ u1 PassManager::run( PassResult& pr )
 
     log.debug( "selection: done" );
 
-    const auto passId = *m_selected.begin();
+    auto passId = *m_selected.begin();
+    const auto passUsage = m_passUsages[ passId ];
+    if( passUsage.repeatsUntil() )
+    {
+        m_passWeights.emplace( passId, 10 );
+        passId = passUsage.repeatsUntil();
+    }
+
     m_passWeights.emplace( passId, 0 );
     for( auto id : m_paths[ passId ] )
     {

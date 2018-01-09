@@ -100,6 +100,8 @@ namespace libpass
 
         void schedule( const Pass::Id passId );
 
+        u1 runPass( const Pass::Id passId, const std::function< void( void ) >& flush );
+
         u1 run( PassResult& pr ) override;
 
         Pass::Id m_defaultPass;

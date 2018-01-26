@@ -44,6 +44,10 @@
 TEST( libpass, main )
 {
     std::cout << libpass::REVTAG << "\n";
+    std::cout << libpass::COMMIT << "\n";
+    std::cout << libpass::BRANCH << "\n";
+    std::cout << libpass::LICENSE << "\n";
+    std::cout << libpass::NOTICE << "\n";
 }
 
 //

@@ -43,7 +43,7 @@
 
 #include <libpass/PassLogger>
 
-#include <libstdhl/log/Chronograph>
+#include <libstdhl/data/log/Chronograph>
 
 #include <algorithm>
 #include <iostream>

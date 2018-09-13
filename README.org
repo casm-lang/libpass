@@ -45,10 +45,12 @@
 
 * libpass: Compiler Pass Infrastructure Library
 
-[[https://ci.casm-lang.org/teams/main/pipelines/development/jobs/libpass-master][https://ci.casm-lang.org/api/v1/teams/main/pipelines/development/jobs/libpass-master/badge]]
+[[https://gitter.im/casm-lang/libpass][https://badges.gitter.im/casm-lang/libpass.png]]
+[[https://ci.casm-lang.org/teams/main/pipelines/development/jobs/libpass-master][ @@html:<img src="https://ci.casm-lang.org/api/v1/teams/main/pipelines/development/jobs/libpass-master/badge">@@ ]]
 [[https://cirrus-ci.com/github/casm-lang/libpass][https://api.cirrus-ci.com/github/casm-lang/libpass.svg]]
 [[https://codecov.io/gh/casm-lang/libpass][https://codecov.io/gh/casm-lang/libpass/badge.svg]]
-[[https://gitter.im/casm-lang/libpass][https://badges.gitter.im/casm-lang/libpass.png]]
+[[https://github.com/casm-lang/libpass/tags][https://img.shields.io/github/tag/casm-lang/libpass.svg]]
+[[https://github.com/casm-lang/libpass/blob/master/LICENSE.txt][https://img.shields.io/badge/license-GPLv3%2BLE-blue.svg]]
 
 
 TBD

@@ -67,7 +67,7 @@ coverage_task:
     env:
       B: "coverage"
       C: "gcc"
-      CODECOV_TOKEN: ENCRYPTED[29e8db677e55a2ca56428f3f5b0fdaed358d278a41570b312fcd265ecb67e90f003f6afef761fa0d5097f1c3f6696549]
+      CODECOV_TOKEN: ENCRYPTED[f9efb1e8c3ec14379feef1947d8477232a9e68436f2883c9b58d20464669d8a4452f71d5eb7f7171112fdfbb01f29fe4]
   fetch_script:
     - make ci-fetch
   build_script:

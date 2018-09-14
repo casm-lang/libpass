@@ -40,4 +40,6 @@
 #
 
 /.attic
+/.idea
+/.vscode
 /obj

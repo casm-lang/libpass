@@ -384,6 +384,14 @@ ifeq (,$(findstring Visual,$(ENV_GEN)))
       -fprofile-arcs -ftest-coverage\
     "
   endif
+
+  ifeq ($(ENV_OSYS),Windows)
+    ifeq ($(ENV_CC),clang)
+      ENV_CMAKE_FLAGS += -DCMAKE_EXE_LINKER_FLAGS="\
+        -Wl,--allow-multiple-definition\
+      "
+    endif
+  endif
 else
   ENV_CMAKE_FLAGS += -DCMAKE_CXX_FLAGS="\
    /D_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING\
@@ -709,12 +717,16 @@ ifeq ($(CI),true)
 endif
 
 ci-info: ci-check info
-	@echo "   B = $(ENV_CI_BUILD)"
+	@echo "   I = $(ENV_CI_BUILD)"
+	@echo "   B = $(ENV_CI_BRANCH)"
+	@echo "   # = $(ENV_CI_COMMIT)"
+	@echo ""
 
 ci-fetch: ci-info
 	@git submodule update --init
+	@echo ""
 	@git submodule foreach \
-	'git branch --remotes | grep $(ENV_CI_BRANCH) && git checkout $(ENV_CI_BRANCH) || git checkout master'
+	'git branch --remotes | grep $(ENV_CI_BRANCH) && git checkout $(ENV_CI_BRANCH) || git checkout master; echo ""'
 	@git submodule
 
 ci-build: ci-check

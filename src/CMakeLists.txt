@@ -40,9 +40,9 @@
 #
 
 include_directories(
+  ${PROJECT_BINARY_DIR}/src
   ${LIBSTDHL_INCLUDE_DIR}
 )
-
 
 add_library( ${PROJECT}-cpp OBJECT
   Pass.cpp

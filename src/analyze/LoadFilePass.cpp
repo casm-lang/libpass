@@ -174,6 +174,7 @@ LoadFilePass::Output::Output( const std::string& filename, const std::ios::openm
 : Input( filename, mode )
 , m_fstream( libstdhl::File::open( filename, mode ) )
 , m_stream( m_fstream.rdbuf() )
+, m_internal( true )
 {
 }
 
@@ -181,6 +182,7 @@ LoadFilePass::Output::Output( const libstdhl::File::TextDocument& file )
 : Input( file.path().toString(), std::ios::in )
 , m_fstream()
 , m_stream( file.buffer() )
+, m_internal( false )
 {
 }
 
@@ -188,6 +190,14 @@ std::iostream& LoadFilePass::Output::stream( void )
 {
     m_stream.seekg( 0 );
     return m_stream;
+}
+
+void LoadFilePass::Output::close( void )
+{
+    if( m_internal and m_fstream.is_open() )
+    {
+        m_fstream.close();
+    }
 }
 
 //

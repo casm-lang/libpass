@@ -99,16 +99,21 @@ TEST( libpass_analyze_LoadFilePass, writable_overwrite_run_log )
     input->setWritable( true );
     input->setOverwrite( true );
 
+    LoadFilePass p;
     PassResult r;
     r.setInputData< LoadFilePass >( input );
 
-    LoadFilePass p;
-
+    EXPECT_EQ( r.hasInput< LoadFilePass >(), true );
+    EXPECT_EQ( r.hasOutput< LoadFilePass >(), false );
     EXPECT_EQ( libstdhl::File::exists( filename ), false );
 
     EXPECT_EQ( p.run( r ), true );
 
+    EXPECT_EQ( r.hasInput< LoadFilePass >(), true );
+    EXPECT_EQ( r.hasOutput< LoadFilePass >(), true );
     EXPECT_EQ( libstdhl::File::exists( filename ), true );
+
+    r.output< LoadFilePass >()->close();
     libstdhl::File::remove( filename );
     EXPECT_EQ( libstdhl::File::exists( filename ), false );
 

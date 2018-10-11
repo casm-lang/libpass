@@ -40,7 +40,7 @@
 #
 
 # LIBPASS_FOUND        - system has found the package
-# LIBPASS_INCLUDE_DIRS - the package include directories
+# LIBPASS_INCLUDE_DIR  - the package include directory
 # LIBPASS_LIBRARY      - the package library
 
 include( LibPackage )
@@ -62,11 +62,7 @@ set( LIBPASS_PROCESS_LIBS     LIBPASS_LIBRARY )
 
 libfind_process( LIBPASS )
 
-if( EXISTS "${LIBPASS_INCLUDE_DIR}" AND
-    EXISTS "${LIBPASS_LIBRARY}" AND
-    ${LIBPASS_INCLUDE_DIR} AND
-    ${LIBPASS_LIBRARY}
-    )
+if( EXISTS "${LIBPASS_LIBRARY}" AND ${LIBPASS_LIBRARY} )
   set( LIBPASS_FOUND TRUE PARENT_SCOPE )
 else()
   set( LIBPASS_FOUND FALSE PARENT_SCOPE )

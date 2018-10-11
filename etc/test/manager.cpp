@@ -103,9 +103,19 @@ TEST( libpass_PassManager, defaultPass_and_defaultResult )
     pr.setInputData< LoadFilePass >( input );
     pm.setDefaultResult( pr );
 
+    EXPECT_EQ( pr.hasInput< LoadFilePass >(), true );
+    EXPECT_EQ( pr.hasOutput< LoadFilePass >(), false );
+    EXPECT_EQ( pm.result().hasInput< LoadFilePass >(), false );
+    EXPECT_EQ( pm.result().hasOutput< LoadFilePass >(), false );
+    EXPECT_EQ( libstdhl::File::exists( filename ), false );
+
     EXPECT_EQ( pm.run( flush ), true );
 
+    EXPECT_EQ( pm.result().hasInput< LoadFilePass >(), true );
+    EXPECT_EQ( pm.result().hasOutput< LoadFilePass >(), true );
     EXPECT_EQ( libstdhl::File::exists( filename ), true );
+
+    pm.result().output< LoadFilePass >()->close();
     libstdhl::File::remove( filename );
     EXPECT_EQ( libstdhl::File::exists( filename ), false );
 }

@@ -43,6 +43,7 @@ TARGET = libpass
 
 FORMAT  = src
 FORMAT += src/*
+FORMAT += src/*/*
 FORMAT += etc
 FORMAT += etc/*
 FORMAT += etc/*/*

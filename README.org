@@ -38,12 +38,22 @@
 #   not obliged to do so. If you do not wish to do so, delete this exception
 #   statement from your version.
 # 
+[[https://github.com/casm-lang/casm-lang.logo/raw/master/etc/headline.png]]
+
+#+options: toc:nil
+
 
 * libpass: Compiler Pass Infrastructure Library
 
-TBD
+[[https://gitter.im/casm-lang/libpass][https://badges.gitter.im/casm-lang/libpass.png]]
+[[https://ci.casm-lang.org/teams/main/pipelines/development/jobs/libpass-master][ @@html:<img src="https://ci.casm-lang.org/api/v1/teams/main/pipelines/development/jobs/libpass-master/badge">@@ ]]
+[[https://cirrus-ci.com/github/casm-lang/libpass][https://api.cirrus-ci.com/github/casm-lang/libpass.svg]]
+[[https://codecov.io/gh/casm-lang/libpass][https://codecov.io/gh/casm-lang/libpass/badge.svg]]
+[[https://github.com/casm-lang/libpass/tags][https://img.shields.io/github/tag/casm-lang/libpass.svg]]
+[[https://github.com/casm-lang/libpass/blob/master/LICENSE.txt][https://img.shields.io/badge/license-GPLv3%2BLE-blue.svg]]
 
-** Status [[https://travis-ci.org/casm-lang/libpass][https://api.travis-ci.org/casm-lang/libpass.svg?branch=master]]
+
+TBD
 
 This repository is still in an early stage and more libraries and documentation
 is coming soon!

@@ -47,7 +47,7 @@
 #include <libpass/PassResult>
 #include <libpass/PassUsage>
 
-#include <libstdhl/file/TextDocument>
+#include <libstdhl/data/file/TextDocument>
 
 #include <ios>
 #include <sstream>
@@ -107,9 +107,12 @@ namespace libpass
 
             std::iostream& stream( void );
 
+            void close( void );
+
           private:
             std::fstream m_fstream;
             std::iostream m_stream;
+            u1 m_internal;
         };
     };
 }

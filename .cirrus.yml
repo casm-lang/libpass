@@ -39,68 +39,88 @@
 #   statement from your version.
 #
 
-sudo: required
+linux_task:
+  container:
+    image: casmlang/container.linux
+    memory: 2
+    cpu: 1
+  matrix:
+    env:
+      B: "coverage"
+      C: "clang"
+    env:
+      B: "coverage"
+      C: "gcc"
+      CODECOV_TOKEN: ENCRYPTED[f9efb1e8c3ec14379feef1947d8477232a9e68436f2883c9b58d20464669d8a4452f71d5eb7f7171112fdfbb01f29fe4]
+  fetch_script:
+    - make ci-fetch
+  deps_script:
+    - make ci-deps
+  build_script:
+    - make ci-build
+  test_script:
+    - make ci-test
+  benchmark_script:
+    - make ci-benchmark
+  coverage_script:
+    - |
+      if [ "$C" == "gcc" ]; then
+        wget https://codecov.io/bash;
+        sh bash -f "!*#usr#include*" 2> /dev/null;
+      fi
 
-language: cpp
+darwin_task:
+  osx_instance:
+    image: high-sierra-xcode-9.4.1
+  matrix:
+    env:
+      B: "debug"
+      C: "clang"
+    env:
+      B: "debug"
+      C: "gcc"
+  setup_script:
+    - brew install cmake
+    - if [ "$C" == "gcc" ]; then brew install gcc; fi
+    - brew install flex  && brew link --force flex
+    - brew install bison && brew link --force bison
+  fetch_script:
+    - make ci-fetch
+  deps_script:
+    - make ci-deps
+  build_script:
+    - make ci-build
+  test_script:
+    - make ci-test
+  benchmark_script:
+    - make ci-benchmark
 
-services:
-  - docker
-
-git:
-  submodules: false
-
-matrix:
-  include:
-    - os:  linux
-      env: IMAGE="ppaulweber/docker-cpp:base" BUILD="debug"    ENV_CC="clang" ENV_CXX="clang++"
-    - os:  linux
-      env: IMAGE="ppaulweber/docker-cpp:base" BUILD="release"  ENV_CC="clang" ENV_CXX="clang++"
-
-    - os:  linux
-      env: IMAGE="ppaulweber/docker-cpp:base" BUILD="debug"    ENV_CC="gcc"   ENV_CXX="g++"
-    - os:  linux
-      env: IMAGE="ppaulweber/docker-cpp:base" BUILD="release"  ENV_CC="gcc"   ENV_CXX="g++"
-
-  allow_failures:
-    - os:  linux
-      env: IMAGE="ppaulweber/docker-cpp" BUILD="debug"    ENV_CC="clang" ENV_CXX="clang++"
-    - os:  linux
-      env: IMAGE="ppaulweber/docker-cpp" BUILD="sanitize" ENV_CC="clang" ENV_CXX="clang++"
-    - os:  linux
-      env: IMAGE="ppaulweber/docker-cpp" BUILD="release"  ENV_CC="clang" ENV_CXX="clang++"
-
-    - os:  linux
-      env: IMAGE="ppaulweber/docker-cpp" BUILD="debug"    ENV_CC="gcc" ENV_CXX="g++"
-    - os:  linux
-      env: IMAGE="ppaulweber/docker-cpp" BUILD="sanitize" ENV_CC="gcc" ENV_CXX="g++"
-    - os:  linux
-      env: IMAGE="ppaulweber/docker-cpp" BUILD="release"  ENV_CC="gcc" ENV_CXX="g++"
-
-    - os:        osx
-      osx_image: xcode8
-      compiler:  clang
-
-    - os:        osx
-      osx_image: xcode8
-      compiler:  gcc
-
-before_install:
-  - git submodule update --init --remote
-  - docker pull ${IMAGE}
-  - docker run -itd --name build -v $(pwd):/repo ${IMAGE} bash
-
-install:
-  - docker exec build uname      -a
-  - docker exec build make       --version
-  - docker exec build cmake      --version
-  - docker exec build ld         --version
-  - docker exec build ${ENV_CC}  --version
-  - docker exec build ${ENV_CXX} --version
-
-script:
-  - docker exec build make -C /repo ${BUILD}
-  - docker exec build make -C /repo ${BUILD}-test
-  - docker exec build make -C /repo ${BUILD}-benchmark
-
-after_success:
-  - docker exec build make -C /repo ${BUILD}-analyze
+windows_task:
+  windows_container:
+    image: casmlang/container.windows
+    os_version: 2016
+    cpu: 1
+  matrix:
+    env:
+      V: mingw64
+      B: "debug"
+      C: "clang"
+    env:
+      V: mingw64
+      B: "debug"
+      C: "gcc"
+  fetch_script:
+    - set PATH=C:\msys2\%V%\bin;%PATH%
+    - make ci-fetch
+  deps_script:
+    - set PATH=C:\msys2\%V%\bin;%PATH%
+    - make ci-deps
+  build_script:
+    - set PATH=C:\msys2\%V%\bin;%PATH%
+    - make ci-build
+  test_script:
+    - set PATH=C:\msys2\%V%\bin;%PATH%
+    - make ci-test
+  benchmark_script:
+    - set PATH=C:\msys2\%V%\bin;%PATH%
+    - make ci-benchmark

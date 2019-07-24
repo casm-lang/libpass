@@ -219,19 +219,30 @@ u1 PassManager::run( const std::function< void( void ) >& flush )
         return false;
     }
 
-    std::unordered_map< Pass::Id, Pass::Id > repeatUntil;
-    u1 first = true;
-    for( auto element : m_schedule )
+    auto start = m_schedule.cbegin();
+    for( auto passIt = m_schedule.cbegin(); passIt != m_schedule.cend(); passIt++ )
     {
-        const auto passId = std::get< 0 >( element );
+        const auto passId = std::get< 0 >( *passIt );
         const auto pass = PassRegistry::passInfo( passId );
 
-        if( m_result.hasOutput( passId ) and first )
+        if( m_result.hasOutput( passId ) )
         {
-            first = false;
+            passIt++;
+            start = passIt;
             log.debug( "'" + pass.name() + "': skipping, result already present!" );
-            continue;
+            break;
         }
+        else
+        {
+            log.debug( "'" + pass.name() + "': result not present!" );
+        }
+    }
+
+    std::unordered_map< Pass::Id, Pass::Id > repeatUntil;
+    for( auto passIt = start; passIt != m_schedule.cend(); passIt++ )
+    {
+        const auto passId = std::get< 0 >( *passIt );
+        const auto pass = PassRegistry::passInfo( passId );
 
         if( not runPass( passId, flush ) )
         {

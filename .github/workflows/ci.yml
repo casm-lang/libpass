@@ -3,8 +3,7 @@ name: CI
 on: [push]
 
 jobs:
-  linux-clang:
-    name: linux-clang-debug
+  linux-clang-debug:
     strategy:
       matrix:
         os: [ ubuntu-latest ]
@@ -27,8 +26,7 @@ jobs:
       run:  |
         make C=clang debug-benchmark
 
-  linux-gcc:
-    name: linux-gcc-coverage
+  linux-gcc-coverage:
     strategy:
       matrix:
         os: [ ubuntu-latest ]
@@ -54,8 +52,7 @@ jobs:
       run:  |
         wget https://codecov.io/bash
         sh bash -f "!*#usr#include*" 2> /dev/null
-  darwin-clang:
-    name: darwin-clang-debug
+  darwin-clang-debug:
     strategy:
       matrix:
         os: [ macOS-latest ]
@@ -83,8 +80,7 @@ jobs:
       run:  |
         make C=clang debug-benchmark
 
-  darwin-gcc:
-    name: darwin-gcc-debug
+  darwin-gcc-debug:
     strategy:
       matrix:
         os: [ macOS-latest ]
@@ -113,8 +109,7 @@ jobs:
       run:  |
         make C=gcc debug-benchmark
 
-  windows-clang:
-    name: windows-clang-debug
+  windows-clang-debug:
     strategy:
       matrix:
         os: [ windows-latest ]
@@ -144,8 +139,7 @@ jobs:
         refreshenv
         make C=clang debug-benchmark
 
-  windows-gcc:
-    name: windows-gcc-debug
+  windows-gcc-debug:
     strategy:
       matrix:
         os: [ windows-latest ]

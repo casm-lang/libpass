@@ -48,10 +48,15 @@ using namespace libpass;
 using namespace libstdhl;
 using namespace Memory;
 
-PassLogger::PassLogger( const PassInfo& info, libstdhl::Log::Stream& stream )
+PassLogger::PassLogger( const std::string& name, libstdhl::Log::Stream& stream )
 : Logger( stream )
 {
-    setSource( make< Log::Source >( info.name(), "Logging source of '" + info.name() + "'" ) );
+    setSource( make< Log::Source >( name, "Logging source of '" + name + "'" ) );
+}
+
+PassLogger::PassLogger( const PassInfo& info, libstdhl::Log::Stream& stream )
+: PassLogger( info.name(), stream )
+{
 }
 
 PassLogger::PassLogger( Pass::Id id, libstdhl::Log::Stream& stream )

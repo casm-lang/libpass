@@ -39,6 +39,11 @@
 #   statement from your version.
 #
 
+[submodule "lib/stdhl"]
+	path = lib/stdhl
+	url = https://github.com/casm-lang/libstdhl
+	branch = master
+
 [submodule "lib/gtest"]
 	path = lib/gtest
 	url = https://github.com/casm-lang/libgtest
@@ -47,9 +52,4 @@
 [submodule "lib/hayai"]
 	path = lib/hayai
 	url = https://github.com/casm-lang/libhayai
-	branch = master
-
-[submodule "lib/stdhl"]
-	path = lib/stdhl
-	url = https://github.com/casm-lang/libstdhl
 	branch = master

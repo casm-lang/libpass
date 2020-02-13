@@ -91,22 +91,22 @@ if( ${LIBSTDHL_FOUND} )
     )
 endif()
 
-add_library( ${PROJECT}-obj STATIC
+add_library( ${PROJECT}-ar STATIC
   $<TARGET_OBJECTS:${PROJECT}-cpp>
   )
 
-set_property( TARGET ${PROJECT}-obj PROPERTY OUTPUT_NAME ${PROJECT} )
-set_property( TARGET ${PROJECT}-obj PROPERTY VERSION ${${PROJECT}_VERSION} )
-set_property( TARGET ${PROJECT}-obj PROPERTY PREFIX  "" )
+set_property( TARGET ${PROJECT}-ar PROPERTY OUTPUT_NAME ${PROJECT} )
+set_property( TARGET ${PROJECT}-ar PROPERTY VERSION ${${PROJECT}_VERSION} )
+set_property( TARGET ${PROJECT}-ar PROPERTY PREFIX  "" )
 
 if( ${LIBSTDHL_FOUND} )
-  target_link_libraries( ${PROJECT}-obj
+  target_link_libraries( ${PROJECT}-ar
     ${LIBSTDHL_LIBRARY}
     )
 endif()
 
 add_dependencies( ${PROJECT}
-  ${PROJECT}-obj
+  ${PROJECT}-ar
   )
 
 #
@@ -140,7 +140,7 @@ add_executable( ${PROJECT}-run
 
 if( ${LIBHAYAI_FOUND} )
   target_link_libraries( ${PROJECT}-run
-    ${PROJECT}-obj
+    ${PROJECT}-ar
     ${LIBHAYAI_LIBRARY}
     )
 endif()
@@ -151,7 +151,7 @@ endif()
 #
 
 install(
-  TARGETS  ${PROJECT} ${PROJECT}-obj
+  TARGETS  ${PROJECT} ${PROJECT}-ar
   EXPORT   ${PROJECT}Targets
   LIBRARY  DESTINATION lib
   ARCHIVE  DESTINATION lib

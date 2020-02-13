@@ -101,7 +101,7 @@ set_property( TARGET ${PROJECT}-ar PROPERTY PREFIX  "" )
 
 if( ${LIBSTDHL_FOUND} )
   target_link_libraries( ${PROJECT}-ar
-    ${LIBSTDHL_LIBRARY}
+    ${LIBSTDHL_ARCHIVE}
     )
 endif()
 
@@ -121,7 +121,7 @@ add_executable( ${PROJECT}-check
 
 if( ${LIBGTEST_FOUND} )
   target_link_libraries( ${PROJECT}-check
-    ${PROJECT}
+    ${PROJECT}-ar
     ${LIBGTEST_LIBRARY}
     ${LIBGTEST_MAIN}
     Threads::Threads

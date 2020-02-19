@@ -41,7 +41,8 @@
 
 # LIBPASS_FOUND        - system has found the package
 # LIBPASS_INCLUDE_DIR  - the package include directory
-# LIBPASS_LIBRARY      - the package library
+# LIBPASS_LIBRARY      - the package shared library
+# LIBPASS_ARCHIVE      - the package static library
 
 include( LibPackage )
 

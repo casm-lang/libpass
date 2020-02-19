@@ -57,7 +57,4 @@ ifeq ($(wildcard $(CONFIG)/.cmake/.*),)
 endif
 
 INCLUDE = $(CONFIG)/.cmake/config.mk
-ifeq ("$(wildcard $(INCLUDE))","")
-  $(error unable to locate $(INCLUDE))
-endif
 include $(INCLUDE)

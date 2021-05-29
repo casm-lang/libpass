@@ -50,7 +50,7 @@ TEST( libpass_PassManager, run )
     libstdhl::Logger log( pm.stream() );
     log.setSource( libstdhl::Memory::make< libstdhl::Log::Source >( TEST_NAME, TEST_NAME ) );
 
-    auto flush = [&pm]() {
+    auto flush = [ &pm ]() {
         libstdhl::Log::ApplicationFormatter f( TEST_NAME );
         libstdhl::Log::OutputStreamSink c( std::cerr, f );
         pm.stream().flush( c );
@@ -66,7 +66,7 @@ TEST( libpass_PassManager, defaultPass )
     libstdhl::Logger log( pm.stream() );
     log.setSource( libstdhl::Memory::make< libstdhl::Log::Source >( TEST_NAME, TEST_NAME ) );
 
-    auto flush = [&pm]() {
+    auto flush = [ &pm ]() {
         libstdhl::Log::ApplicationFormatter f( TEST_NAME );
         libstdhl::Log::OutputStreamSink c( std::cerr, f );
         pm.stream().flush( c );
@@ -85,7 +85,7 @@ TEST( libpass_PassManager, defaultPass_and_defaultResult )
     libstdhl::Logger log( pm.stream() );
     log.setSource( libstdhl::Memory::make< libstdhl::Log::Source >( TEST_NAME, TEST_NAME ) );
 
-    auto flush = [&pm]() {
+    auto flush = [ &pm ]() {
         libstdhl::Log::ApplicationFormatter f( TEST_NAME );
         libstdhl::Log::OutputStreamSink c( std::cerr, f );
         pm.stream().flush( c );

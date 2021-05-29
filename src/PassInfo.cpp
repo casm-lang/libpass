@@ -83,7 +83,7 @@ PassInfo::PassInfo(
 , m_arg_selected( false )
 , m_changes( 0 )
 {
-    m_arg_action = [this]( const char* arg ) {
+    m_arg_action = [ this ]( const char* arg ) {
         this->m_arg_selected = true;
         return 0;
     };

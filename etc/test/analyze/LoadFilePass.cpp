@@ -48,6 +48,7 @@ TEST( libpass_analyze_LoadFilePass, instance )
     LoadFilePass p;
 }
 
+#if not defined( __EMSCRIPTEN__ )
 TEST( libpass_analyze_LoadFilePass, run_and_log )
 {
     std::string filename = TEST_NAME + ".txt";
@@ -67,7 +68,9 @@ TEST( libpass_analyze_LoadFilePass, run_and_log )
     libstdhl::Log::OutputStreamSink c( std::cerr, f );
     p.stream().flush( c );
 }
+#endif
 
+#if not defined( __EMSCRIPTEN__ )
 TEST( libpass_analyze_LoadFilePass, writable_run_log )
 {
     std::string filename = TEST_NAME + ".txt";
@@ -90,7 +93,9 @@ TEST( libpass_analyze_LoadFilePass, writable_run_log )
     libstdhl::Log::OutputStreamSink c( std::cerr, f );
     p.stream().flush( c );
 }
+#endif
 
+#if not defined( __EMSCRIPTEN__ )
 TEST( libpass_analyze_LoadFilePass, writable_overwrite_run_log )
 {
     std::string filename = TEST_NAME + ".txt";
@@ -121,3 +126,4 @@ TEST( libpass_analyze_LoadFilePass, writable_overwrite_run_log )
     libstdhl::Log::OutputStreamSink c( std::cerr, f );
     p.stream().flush( c );
 }
+#endif

@@ -41,8 +41,7 @@
 
 # LIBPASS_FOUND        - system has found the package
 # LIBPASS_INCLUDE_DIR  - the package include directory
-# LIBPASS_LIBRARY      - the package shared library
-# LIBPASS_ARCHIVE      - the package static library
+# LIBPASS_LIBRARY      - the package library
 
 include( LibPackage )
 
@@ -54,22 +53,16 @@ find_path( LIBPASS_INCLUDE_DIR
   )
 
 find_library( LIBPASS_LIBRARY
-  NAMES libpass.so libpass.dylib libpass.dll
-  PATHS ${LIBPASS_PKGCONF_LIBRARY_DIRS}
-  )
-
-find_library( LIBPASS_ARCHIVE
-  NAMES libpass.a
+  NAMES libpass.so libpass.dylib libpass.dll libpass.a
   PATHS ${LIBPASS_PKGCONF_LIBRARY_DIRS}
   )
 
 set( LIBPASS_PROCESS_INCLUDES LIBPASS_INCLUDE_DIR )
-set( LIBPASS_PROCESS_LIBS     LIBPASS_LIBRARY LIBPASS_ARCHIVE )
+set( LIBPASS_PROCESS_LIBS     LIBPASS_LIBRARY )
 
 libfind_process( LIBPASS )
 
-if( EXISTS "${LIBPASS_LIBRARY}" AND ${LIBPASS_LIBRARY} AND
-    EXISTS "${LIBPASS_ARCHIVE}" AND ${LIBPASS_ARCHIVE} )
+if( EXISTS "${LIBPASS_LIBRARY}" AND ${LIBPASS_LIBRARY} )
   set( LIBPASS_FOUND TRUE PARENT_SCOPE )
 else()
   set( LIBPASS_FOUND FALSE PARENT_SCOPE )

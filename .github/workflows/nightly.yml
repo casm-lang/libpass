@@ -61,19 +61,20 @@ jobs:
         - { vm: ubuntu-20.04, os: linux,   isa: x86_64, tool: gcc,   build: release }
         - { vm: ubuntu-20.04, os: linux,   isa: x86_64, tool: emcc,  build: release }
         - { vm: macos-10.15,  os: darwin,  isa: x86_64, tool: gcc,   build: release }
-        - { vm: windows-2019, os: windows, isa: x86_64, tool: gcc,   build: release }
+        - { vm: windows-2019, os: windows, isa: x86_64, tool: clang, build: release }
     env:
       B: ${{ matrix.job.build }}
       C: ${{ matrix.job.tool }}
       G: ninja
-      H: ccache
-      I: ${{ github.workspace }}/.attic/install
+      H: sccache
+      #I: ${{ github.workspace }}/.attic/install
     steps:
     - name: Checkout
       uses: actions/checkout@v1
-    - name: Install 'ccache'
+    - name: Install 'sccache'
       uses: hendrikmuhs/ccache-action@v1.2.1
       with:
+        variant: sccache
         key: ${{ matrix.job.os }}-${{ matrix.job.isa }}-${{ matrix.job.tool }}-${{ matrix.job.build }}
     - name: Install 'emcc'
       if:   matrix.job.tool == 'emcc'

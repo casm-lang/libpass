@@ -53,7 +53,7 @@ find_path( LIBPASS_INCLUDE_DIR
   )
 
 find_library( LIBPASS_LIBRARY
-  NAMES libpass.so libpass.dylib libpass.dll libpass.a
+  NAMES pass
   PATHS ${LIBPASS_PKGCONF_LIBRARY_DIRS}
   )
 
